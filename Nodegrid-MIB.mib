@@ -1,0 +1,1515 @@
+--  ***********************************************************
+--  MIB module identifier assignments for ZPE Systems Nodegrid
+--  products.
+--  February 28, 2020
+--  zpeSystems OBJECT IDENTIFIER ::= { enterprises 42518 }
+--  zpeSystemsMibs OBJECT IDENTIFIER ::= { zpeSystems 2 }
+--  ***********************************************************
+
+Nodegrid-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+  MODULE-IDENTITY, OBJECT-TYPE FROM SNMPv2-SMI
+  Integer32, Counter32, Counter64, IpAddress, Unsigned32 FROM SNMPv2-SMI
+  MODULE-COMPLIANCE, OBJECT-GROUP FROM SNMPv2-CONF
+  ifIndex FROM IF-MIB
+  DisplayString, TruthValue FROM SNMPv2-TC
+  zpeSystemsMibs FROM ZPESystems-MIB
+      ;
+
+nodegridMib MODULE-IDENTITY
+        LAST-UPDATED    "202002240000Z"
+        ORGANIZATION    "ZPE Systems Inc."
+        CONTACT-INFO
+            "ZPE Systems Support
+             E-mail: support@zpesystems.com"
+        DESCRIPTION
+            "Nodegrid Family Vendor MIB definition.
+             Adopted by Nodegrid release 4.1.0."
+        REVISION        "202002240000Z"
+        DESCRIPTION
+            "Added new branch for ngSRSystem for Nodegrid SR products."
+        REVISION        "201908280000Z"
+        DESCRIPTION
+            "First revision."
+::= { zpeSystemsMibs 1 }
+
+nodegridSystem  OBJECT IDENTIFIER ::= { nodegridMib 1 }
+
+ngNSCSystem	OBJECT IDENTIFIER ::= { nodegridMib 2 }
+
+ngSRSystem	OBJECT IDENTIFIER ::= { nodegridMib 3 }
+
+ngSwitchSystem	OBJECT IDENTIFIER ::= { ngSRSystem 1 }
+
+ngInformation   OBJECT IDENTIFIER
+-- STATUS current
+-- DESCRIPTION This is the root for information about the unit
+::= { nodegridSystem 1 }
+
+--
+-- nodegrid  Objects
+--
+
+ngInfoSystem      OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Unit product name "
+::= { ngInformation 1 }
+
+ngInfoVersion     OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Software version "
+::= { ngInformation 2 }
+
+ngInfoLicences    OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Total number of licenses"
+::= { ngInformation 3 }
+
+ngInfoCPU         OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Information about unit CPU"
+::= { ngInformation 4 }
+
+ngInfoNumCPU       OBJECT-TYPE
+    SYNTAX      Integer32(1..4)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of CPUs"
+::= { ngInformation 5 }
+
+ngInfoSerialNumber OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Unit serial number "
+::= { ngInformation 6 }
+
+ngInfoPartNumber  OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Unit part number "
+::= { ngInformation 7 }
+
+ngInfoPowerSupply1  OBJECT-TYPE
+    SYNTAX     INTEGER{
+                off(0),
+                on(1),
+                notapplicable(2)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "State of power supply 1 "
+::= { ngInformation 8 }
+
+ngInfoPowerSupply2  OBJECT-TYPE
+    SYNTAX     INTEGER{
+                off(0),
+                on(1),
+                notapplicable(2)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "State of power supply 2 "
+::= { ngInformation 9 }
+
+
+-- Information about configured devices
+
+ngInfoDevices    OBJECT IDENTIFIER
+-- STATUS current
+-- DESCRIPTION This is the root for information about configured devices
+::= { nodegridSystem 2 }
+
+ngInfoDevicesNumOfDevices  OBJECT-TYPE
+    SYNTAX     Integer32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+       "This object contains number of configured devices.
+        This identifies the number of entries in ngInfoDevicestable."
+::= { ngInfoDevices 1 }
+
+ngInfoDevicesTable   OBJECT-TYPE
+    SYNTAX  SEQUENCE OF NgInfoDevicesEntry
+    MAX-ACCESS  not-accessible
+    STATUS  current
+    DESCRIPTION        
+       "This table represents configured devices in the unit."
+::= { ngInfoDevices 2 }
+
+ngInfoDevicesEntry   OBJECT-TYPE
+    SYNTAX  NgInfoDevicesEntry
+    MAX-ACCESS  not-accessible
+    STATUS  current
+    DESCRIPTION        
+        "An entry for each configured device. 
+        Each entry contains information on device name, status, type, 
+        mode and license status."
+    INDEX   { ngDeviceType, ngDeviceUID }
+::= { ngInfoDevicesTable 1}
+ 
+NgInfoDevicesEntry ::=
+    SEQUENCE {
+        ngDeviceUID       Unsigned32,
+        ngDeviceName      OCTET STRING,
+        ngDeviceStatus    INTEGER,
+        ngDeviceType      INTEGER,
+        ngDeviceConnectThrough OCTET STRING,
+        ngDeviceMode      INTEGER,
+        ngDeviceLicensed  INTEGER
+    }
+
+ngDeviceUID     OBJECT-TYPE
+    SYNTAX     Unsigned32(1..65000)
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION         
+        "This object unique identifies the device."
+::= { ngInfoDevicesEntry 1 }
+
+ngDeviceName    OBJECT-TYPE
+    SYNTAX     OCTET STRING
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Device name."
+::= { ngInfoDevicesEntry 2 }
+
+ngDeviceStatus    OBJECT-TYPE
+    SYNTAX     INTEGER{
+                unknown(0),
+                inUse(1),
+                connected(2),
+                disconnected(3)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Device status."
+::= { ngInfoDevicesEntry 3 }
+
+ngDeviceType    OBJECT-TYPE
+    SYNTAX     INTEGER{
+                ilo(1),
+                imm(2),
+                drac(3),
+                idrac6(4),
+                ipmi15(5),
+                ipmi20(6),
+                ilom(7),
+                cimcucs(8),
+                netapp(9),
+                deviceconsole(10),
+                virtualconsolevmware(11),
+                virtualconsolekvm(12),
+                consoleserveracs(13),
+                consoleserveropengear(14),
+                consoleserveracs6000(15),
+                consoleserverlantronix(16),
+                kvmdsr(17),
+                localserial(18),
+                pdumph2(19),
+                pdupm3000(20),
+                pduraritan(21),
+                pduservertech(22),
+                pduapc(23),
+                pdubaytech(24),
+                pdueconnex(25),
+                kvmmpu(26),
+                usbserial(27),
+                unknown(99)
+    }
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION         
+        "Device Type."
+::= { ngInfoDevicesEntry 4 }
+
+ngDeviceConnectThrough    OBJECT-TYPE
+    SYNTAX     OCTET STRING
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "How unit is connected to device.
+         Physical device name (ttySXX) for serial ports.
+         IP address of the device for others types."
+::= { ngInfoDevicesEntry 5 }
+
+ngDeviceMode    OBJECT-TYPE
+    SYNTAX     INTEGER{
+                disabled(0),
+                enabled(1),
+                discovered(2),
+                ondemand(3),
+                licensed(4),
+                unlicensed(5)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Device mode."
+::= { ngInfoDevicesEntry 6 }
+
+ngDeviceLicensed    OBJECT-TYPE
+    SYNTAX     INTEGER{
+                 unlicensed(0),
+                 licensed(1)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Device license status."
+::= { ngInfoDevicesEntry 7 }
+
+-- Information about Open Sessions  
+ngOpenSessions    OBJECT IDENTIFIER
+-- STATUS current
+-- DESCRIPTION This is the root for open sessions information
+::= { nodegridSystem 3 }
+
+ngOpenSessionsNumOfSessions  OBJECT-TYPE
+    SYNTAX     Integer32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION        
+       "This object contains number of open sessions.
+        This identifies the number of entries in ngOpenSessionstable."
+::= { ngOpenSessions 1 }
+
+ngOpenSessionsTable   OBJECT-TYPE
+    SYNTAX  SEQUENCE OF NgOpenSessionsEntry
+    MAX-ACCESS  not-accessible
+    STATUS  current
+    DESCRIPTION        
+       "This table has information about open sessions in the unit."
+::= { ngOpenSessions 2 }
+
+ngOpenSessionsEntry   OBJECT-TYPE
+    SYNTAX  NgOpenSessionsEntry
+    MAX-ACCESS  not-accessible
+    STATUS  current
+    DESCRIPTION        
+        "An entry for each open session. 
+        Each entry contains information on username used to logged in the session,
+        connection mode, session type, device name when direct connect to device, 
+        session start time."
+    INDEX   { ngOpenSessionRef }
+::= { ngOpenSessionsTable 1}
+ 
+NgOpenSessionsEntry ::=
+    SEQUENCE {
+        ngOpenSessionRef      Unsigned32,
+        ngOpenSessionUser     OCTET STRING,
+        ngOpenSessionMode     INTEGER,
+        ngOpenSessionType     INTEGER,
+        ngOpenSessionSourceIP IpAddress,
+        ngOpenSessionDevice   OCTET STRING,
+        ngOpenSessionStartTime OCTET STRING
+    }
+
+ngOpenSessionRef     OBJECT-TYPE
+    SYNTAX     Unsigned32(1..65000)
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION         
+        "This object unique identifies the openned session."
+::= { ngOpenSessionsEntry 1 }
+
+ngOpenSessionUser     OBJECT-TYPE
+    SYNTAX     OCTET STRING
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "User logged in the session."
+::= { ngOpenSessionsEntry 2 }
+
+ngOpenSessionMode     OBJECT-TYPE
+    SYNTAX     INTEGER{
+                ssh(0),
+                telnet(1),
+                console(2),
+                http(3),
+                https(4),
+                raw(5),
+                mks(6),
+                cloud(7),
+                dialin(8)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "how session is stablished."
+::= { ngOpenSessionsEntry 3 }
+
+ngOpenSessionType     OBJECT-TYPE
+    SYNTAX     INTEGER{
+                kvm(1),
+                console(2),
+                power(3),
+                web(4),
+                ipmi(5),
+                cli(6),
+                api(7),
+                mks(8),
+                tunnel(9)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Session type."
+::= { ngOpenSessionsEntry 4 }
+
+ngOpenSessionSourceIP     OBJECT-TYPE
+    SYNTAX     IpAddress
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "When remote access, it has the IP address of the user machine."
+::= { ngOpenSessionsEntry 5 }
+
+ngOpenSessionDevice   OBJECT-TYPE
+    SYNTAX     OCTET STRING
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Device Name of the accessed device within this session."
+::= { ngOpenSessionsEntry 6 }
+
+ngOpenSessionStartTime   OBJECT-TYPE
+    SYNTAX     OCTET STRING
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Time when session started."
+::= { ngOpenSessionsEntry 7 }
+
+-- Information about events ocurrencies  
+ngEventsList    OBJECT IDENTIFIER
+-- STATUS current
+-- DESCRIPTION This is the root for event counters
+::= { nodegridSystem 4 }
+
+ngEventsListNumOfEvents  OBJECT-TYPE
+    SYNTAX     Integer32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION        
+       "This object contains number of events supported by unit.
+        This identifies the number of entries in ngEventsListtable."
+::= { ngEventsList 1 }
+
+ngEventsListTable   OBJECT-TYPE
+    SYNTAX  SEQUENCE OF NgEventsListEntry
+    MAX-ACCESS  not-accessible
+    STATUS  current
+    DESCRIPTION        
+       "This table has information about events ocurrencies in this unit."
+::= { ngEventsList 2 }
+
+ngEventsListEntry   OBJECT-TYPE
+    SYNTAX  NgEventsListEntry
+    MAX-ACCESS  not-accessible
+    STATUS  current
+    DESCRIPTION        
+        "An entry for each event generated by this unit. 
+        Each entry contains information on event number, event description,
+        ocurrencies, event category."
+    INDEX   { ngEventNumber }
+::= { ngEventsListTable 1}
+ 
+NgEventsListEntry ::=
+    SEQUENCE {
+        ngEventNumber      Integer32,
+        ngEventDescription OCTET STRING,
+        ngEventOcurrencies Counter32,
+        ngEventCategory    INTEGER
+    }
+
+ngEventNumber    OBJECT-TYPE
+    SYNTAX     Integer32(1..65000)
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION         
+        "This object unique identifies the event."
+::= { ngEventsListEntry 1 }
+
+ngEventDescription   OBJECT-TYPE
+    SYNTAX     OCTET STRING
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Event Description."
+::= { ngEventsListEntry 2 }
+
+ngEventOcurrencies    OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Number of times this event was generated."
+::= { ngEventsListEntry 3 }
+
+ngEventCategory    OBJECT-TYPE
+    SYNTAX     INTEGER{
+                system(1),
+                aaa(2),
+                device(3),
+                logging(4)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Event Category."
+::= { ngEventsListEntry 4 }
+
+-- Serial Ports Statistics  
+ngNSCStats    OBJECT IDENTIFIER
+-- STATUS current
+-- DESCRIPTION This is the root for local serial ports statistics
+::= { ngNSCSystem 1 }
+
+ngNSCStatsNumOfPorts  OBJECT-TYPE
+    SYNTAX     Integer32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION        
+       "This object contains number of local serial ports available in this unit.
+        This identifies the number of entries in ngNSCStatstable."
+::= { ngNSCStats 1 }
+
+ngNSCStatsTable   OBJECT-TYPE
+    SYNTAX  SEQUENCE OF NgNSCStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS  current
+    DESCRIPTION        
+       "This table has information about each local serial port in this unit."
+::= { ngNSCStats 2 }
+
+ngNSCStatsEntry   OBJECT-TYPE
+    SYNTAX  NgNSCStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS  current
+    DESCRIPTION        
+        "An entry for each local serial port in this unit. 
+        Each entry contains information on device name, speed, rs232 signals status,
+        serial statistcs (Rx/Tx bytes, CTS/DCD variation, ...)."
+    INDEX   { ngNSCStatsPortNumber }
+::= { ngNSCStatsTable 1}
+ 
+NgNSCStatsEntry ::=
+    SEQUENCE {
+        ngNSCStatsPortNumber      Integer32,
+        ngNSCStatsDeviceName      OCTET STRING,
+        ngNSCStatsPortSpeed       Integer32,
+        ngNSCStatsRxBytes         Counter32,
+        ngNSCStatsTxBytes         Counter32,
+        ngNSCStatsCTSVar          Counter32,
+        ngNSCStatsDCDVar          Counter32,
+        ngNSCStatsFrameE          Counter32,
+        ngNSCStatsOverrun         Counter32,
+        ngNSCStatsParityE         Counter32,
+        ngNSCStatsBreakE          Counter32,
+        ngNSCStatsBufferO         Counter32,
+        ngNSCStatsDTR             INTEGER,
+        ngNSCStatsRTS             INTEGER,
+        ngNSCStatsDCD             INTEGER,
+        ngNSCStatsCTS             INTEGER
+    }
+
+ngNSCStatsPortNumber    OBJECT-TYPE
+    SYNTAX     Integer32(1..96)
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION         
+        "This object unique identifies the local serial port."
+::= { ngNSCStatsEntry 1 }
+
+ngNSCStatsDeviceName    OBJECT-TYPE
+    SYNTAX     OCTET STRING
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Device Name associated with this local serial port."
+::= { ngNSCStatsEntry 2 }
+
+ngNSCStatsPortSpeed    OBJECT-TYPE
+    SYNTAX     Integer32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Actual speed of this local serial port."
+::= { ngNSCStatsEntry 3 }
+
+ngNSCStatsRxBytes    OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Number of bytes received from this local serial port since counter reset operation."
+::= { ngNSCStatsEntry 4 }
+
+ngNSCStatsTxBytes    OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Number of bytes transmitted to this local serial port since counter reset operation."
+::= { ngNSCStatsEntry 5 }
+
+ngNSCStatsCTSVar    OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Number of times the RS232 CTS signal goes from Down to UP in this local serial port 
+         since counter reset operation."
+::= { ngNSCStatsEntry 6 }
+
+ngNSCStatsDCDVar    OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Number of times the RS232 DCD signal goes from Down to UP in this local serial port 
+         since counter reset operation."
+::= { ngNSCStatsEntry 7 }
+
+ngNSCStatsFrameE    OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Number of framed errors in this local serial port since counter reset operation."
+::= { ngNSCStatsEntry 8 }
+
+ngNSCStatsOverrun    OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Number of detected overrun errors in this local serial port since counter reset operation."
+::= { ngNSCStatsEntry 9 }
+
+ngNSCStatsParityE    OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Number of parity errors in this local serial port since counter reset operation."
+::= { ngNSCStatsEntry 10 }
+
+ngNSCStatsBreakE    OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Number of break received in this local serial port since counter reset operation."
+::= { ngNSCStatsEntry 11 }
+
+ngNSCStatsBufferO    OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "Number of buffer overrun errors this local serial port since counter reset operation."
+::= { ngNSCStatsEntry 12 }
+
+ngNSCStatsDTR        OBJECT-TYPE
+    SYNTAX     INTEGER{
+                down(0),
+                up(1)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "State of RS232 DTR signal in this local serial port."
+::= { ngNSCStatsEntry 13 }
+
+ngNSCStatsRTS        OBJECT-TYPE
+    SYNTAX     INTEGER{
+                down(0),
+                up(1)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "State of RS232 RTS signal in this local serial port."
+::= { ngNSCStatsEntry 14 }
+
+ngNSCStatsDCD        OBJECT-TYPE
+    SYNTAX     INTEGER{
+                down(0),
+                up(1)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "State of RS232 DCD signal in this local serial port."
+::= { ngNSCStatsEntry 15 }
+
+ngNSCStatsCTS        OBJECT-TYPE
+    SYNTAX     INTEGER{
+                down(0),
+                up(1)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION         
+        "State of RS232 CTS signal in this local serial port."
+::= { ngNSCStatsEntry 16 }
+
+-- SFP transceiver info  
+ngNSCSfp    OBJECT IDENTIFIER
+-- STATUS current
+-- DESCRIPTION This is the root for SFP info
+::= { ngNSCSystem 2 }
+
+ngNSCSfpInfoTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF NgNSCSfpInfoEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "table with SFP info"
+    ::= { ngNSCSfp 1 }
+
+ngNSCSfpInfoEntry OBJECT-TYPE
+    SYNTAX      NgNSCSfpInfoEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "SFP info - part of the content of the SFP's 0xA0 EEPROM"
+    INDEX   { ifIndex }
+    ::=  { ngNSCSfpInfoTable 1 }
+
+NgNSCSfpInfoEntry ::=
+    SEQUENCE {
+        ngNSCSfpInfoIfName      OCTET STRING,
+        ngNSCSfpInfoId		OCTET STRING,
+	ngNSCSfpInfoIdExt	OCTET STRING,
+	ngNSCSfpInfoConnector	OCTET STRING,
+	ngNSCSfpInfoTransCode	OCTET STRING,
+	ngNSCSfpInfoTransType	OCTET STRING,
+	ngNSCSfpInfoEnconding	OCTET STRING,
+	ngNSCSfpInfoRateId	OCTET STRING,
+	ngNSCSfpInfoLaserWave	Integer32,
+	ngNSCSfpInfoVendorName	OCTET STRING,
+	ngNSCSfpInfoVendorOUI	OCTET STRING,
+	ngNSCSfpInfoVendorPn	OCTET STRING,
+	ngNSCSfpInfoDOM		TruthValue,
+        ngNSCSfpInfoAlarm	TruthValue
+    }
+
+ngNSCSfpInfoIfName OBJECT-TYPE
+	SYNTAX OCTET STRING 
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"system interface name"
+::= { ngNSCSfpInfoEntry 1 }
+
+ngNSCSfpInfoId OBJECT-TYPE
+	SYNTAX OCTET STRING 
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"module identifier specified the physical device"
+::= { ngNSCSfpInfoEntry 2 }
+
+ngNSCSfpInfoIdExt OBJECT-TYPE
+	SYNTAX OCTET STRING 
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"module extended identifier"
+::= { ngNSCSfpInfoEntry 3 }
+
+ngNSCSfpInfoConnector	OBJECT-TYPE
+	SYNTAX OCTET STRING 
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Indicates the external optical cable connector provided as the media interface"
+::= { ngNSCSfpInfoEntry 4 }
+
+ngNSCSfpInfoTransCode	OBJECT-TYPE
+	SYNTAX OCTET STRING 
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"transceiver code"
+::= { ngNSCSfpInfoEntry 5 }
+
+ngNSCSfpInfoTransType	OBJECT-TYPE
+	SYNTAX OCTET STRING
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"transceiver type"
+::= { ngNSCSfpInfoEntry 6 }
+
+ngNSCSfpInfoEnconding	OBJECT-TYPE
+	SYNTAX OCTET STRING 
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"transceiver enconding"
+::= { ngNSCSfpInfoEntry 7 }
+
+ngNSCSfpInfoRateId OBJECT-TYPE
+	SYNTAX OCTET STRING 
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"transceiver rate id"
+::= { ngNSCSfpInfoEntry 8 }
+
+ngNSCSfpInfoLaserWave	OBJECT-TYPE
+	SYNTAX Integer32
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Nominal transmitter output wavelength at room temperature in nm."
+::= { ngNSCSfpInfoEntry 9 }
+
+ngNSCSfpInfoVendorName	OBJECT-TYPE
+	SYNTAX OCTET STRING
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"the transceiver's vendor name"
+::= { ngNSCSfpInfoEntry 10 }
+
+ngNSCSfpInfoVendorOUI	OBJECT-TYPE
+	SYNTAX OCTET STRING
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"the transceiver's vendor IEEE Company Identifier"
+::= { ngNSCSfpInfoEntry 11 }
+
+ngNSCSfpInfoVendorPn	OBJECT-TYPE
+	SYNTAX OCTET STRING
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"the transceiver's vendor part number"
+::= { ngNSCSfpInfoEntry 12 }
+
+ngNSCSfpInfoDOM	OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"indicate if the SFP supports Digital Diagnostics"
+::= { ngNSCSfpInfoEntry 13 }
+
+ngNSCSfpInfoAlarm OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"indicate if the SFP supports Alarm and warning for DOM"
+::= { ngNSCSfpInfoEntry 14 }
+
+ngNSCSfpDomTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF NgNSCSfpDomEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "table with digital optical info when SFP supports it"
+    ::= { ngNSCSfp 2 }
+
+ngNSCSfpDomEntry OBJECT-TYPE
+    SYNTAX      NgNSCSfpDomEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "SFP DOM info"
+    INDEX   { ifIndex }
+    ::=  { ngNSCSfpDomTable 1 }
+
+NgNSCSfpDomEntry ::=
+    SEQUENCE {
+        ngNSCSfpDomTemperatureC      Integer32,
+        ngNSCSfpDomTemperatureF      Integer32,
+        ngNSCSfpDomVoltage           Integer32,
+        ngNSCSfpDomLaserBias         Unsigned32,
+        ngNSCSfpDomTxPower           Unsigned32,
+        ngNSCSfpDomRxPower           Unsigned32,
+        ngNSCSfpDomTxPowerdBm        DisplayString,
+        ngNSCSfpDomRxPowerdBm        DisplayString
+    }
+
+ngNSCSfpDomTemperatureC  OBJECT-TYPE
+	SYNTAX Integer32
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Internally measured transceiver temperature in 0.01 degrees Celsius"
+::= { ngNSCSfpDomEntry 1 }
+
+ngNSCSfpDomTemperatureF OBJECT-TYPE
+	SYNTAX Integer32
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Internally measured transceiver temperature in 0.01 degrees Fahrenheit"
+::= { ngNSCSfpDomEntry 2 }
+
+ngNSCSfpDomVoltage  OBJECT-TYPE
+	SYNTAX Integer32
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Internally measured transceiver supply voltage in 0.0001 V"
+::= { ngNSCSfpDomEntry 3 }
+
+ngNSCSfpDomLaserBias  OBJECT-TYPE
+	SYNTAX Unsigned32
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Measured TX bias current in micro-Amps"
+::= { ngNSCSfpDomEntry 4 }
+
+ngNSCSfpDomTxPower    OBJECT-TYPE
+	SYNTAX Unsigned32
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Measured TX output power in 0.0001 mW"
+::= { ngNSCSfpDomEntry 5 }
+
+ngNSCSfpDomRxPower    OBJECT-TYPE
+	SYNTAX Unsigned32
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Measured Rx input power in 0x0001 mW"
+::= { ngNSCSfpDomEntry 6 }
+
+ngNSCSfpDomTxPowerdBm  OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Measured TX output power in dBm "
+::= { ngNSCSfpDomEntry 7 }
+
+ngNSCSfpDomRxPowerdBm  OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Measured Rx input power in dBm"
+::= { ngNSCSfpDomEntry 8 }
+
+ngNSCSfpStatusTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF NgNSCSfpStatusEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "table with alarm status when SFP supports DOM"
+    ::= { ngNSCSfp 3 }
+
+ngNSCSfpStatusEntry OBJECT-TYPE
+    SYNTAX      NgNSCSfpStatusEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "SFP DOM - Alarm Status"
+    INDEX   { ifIndex }
+    ::=  { ngNSCSfpStatusTable 1 }
+
+NgNSCSfpStatusEntry ::=
+    SEQUENCE {
+         ngNSCSfpStatusLbiasHighAlarm        TruthValue,
+         ngNSCSfpStatusLbiasLowAlarm         TruthValue,
+         ngNSCSfpStatusLbiasHighWarn         TruthValue,
+         ngNSCSfpStatusLbiasLowWarn          TruthValue,
+         ngNSCSfpStatusTxPowerHighAlarm      TruthValue,
+         ngNSCSfpStatusTxPowerLowAlarm       TruthValue,
+         ngNSCSfpStatusTxPowerHighWarn       TruthValue,
+         ngNSCSfpStatusTxPowerLowWarn        TruthValue,
+         ngNSCSfpStatusRxPowerHighAlarm      TruthValue,
+         ngNSCSfpStatusRxPowerLowAlarm       TruthValue,
+         ngNSCSfpStatusRxPowerHighWarn       TruthValue,
+         ngNSCSfpStatusRxPowerLowWarn        TruthValue,
+         ngNSCSfpStatusTempHighAlarm         TruthValue,
+         ngNSCSfpStatusTempLowAlarm          TruthValue,
+         ngNSCSfpStatusTempHighWarn          TruthValue,
+         ngNSCSfpStatusTempLowWarn           TruthValue,
+         ngNSCSfpStatusVoltageHighAlarm      TruthValue,
+         ngNSCSfpStatusVoltageLowAlarm       TruthValue,
+         ngNSCSfpStatusVoltageHighWarn       TruthValue,
+         ngNSCSfpStatusVoltageLowWarn        TruthValue
+    }
+
+ngNSCSfpStatusLbiasHighAlarm  OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Laser Bias Current reaches or overpasses the High Alarm threshold"
+::= { ngNSCSfpStatusEntry 1 }
+
+ngNSCSfpStatusLbiasLowAlarm      OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Laser Bias Current reaches or underpasses the Low Alarm threshold"
+::= { ngNSCSfpStatusEntry 2 }
+
+ngNSCSfpStatusLbiasHighWarn      OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Laser Bias Current reaches or overpasses the High Warning threshold"
+::= { ngNSCSfpStatusEntry 3 }
+
+ngNSCSfpStatusLbiasLowWarn       OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Laser Bias Current reaches or underpasses the Low Warning threshold"
+::= { ngNSCSfpStatusEntry 4 }
+
+ngNSCSfpStatusTxPowerHighAlarm   OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Transmit Power reaches or overpasses the High Alarm threshold"
+::= { ngNSCSfpStatusEntry 5 }
+
+ngNSCSfpStatusTxPowerLowAlarm    OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Transmit Power reaches or underpasses the Low Alarm threshold"
+::= { ngNSCSfpStatusEntry 6 }
+
+ngNSCSfpStatusTxPowerHighWarn    OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Transmit Power reaches or overpasses the High Warning threshold"
+::= { ngNSCSfpStatusEntry 7 }
+
+ngNSCSfpStatusTxPowerLowWarn     OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Transmit Power reaches or underpasses the Low Warning threshold"
+::= { ngNSCSfpStatusEntry 8 }
+
+ngNSCSfpStatusRxPowerHighAlarm   OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Receive Power reaches or overpasses the High Alarm threshold"
+::= { ngNSCSfpStatusEntry 9 }
+
+ngNSCSfpStatusRxPowerLowAlarm    OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Receive Power reaches or underpasses the Low Alarm threshold"
+::= { ngNSCSfpStatusEntry 10 }
+
+ngNSCSfpStatusRxPowerHighWarn    OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Receive Power reaches or overpasses the High Warning threshold"
+::= { ngNSCSfpStatusEntry 11 }
+
+ngNSCSfpStatusRxPowerLowWarn     OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Receive Power reaches or underpasses the Low Warning threshold"
+::= { ngNSCSfpStatusEntry 12 }
+
+ngNSCSfpStatusTempHighAlarm      OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Module temperature reaches or overpasses the High Alarm threshold"
+::= { ngNSCSfpStatusEntry 13 }
+
+ngNSCSfpStatusTempLowAlarm       OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Module temperature reaches or underpasses the Low Alarm threshold"
+::= { ngNSCSfpStatusEntry 14 }
+
+ngNSCSfpStatusTempHighWarn       OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Module temperature reaches or overpasses the High Warning threshold"
+::= { ngNSCSfpStatusEntry 15 }
+
+ngNSCSfpStatusTempLowWarn        OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Module temperature reaches or overpasses the High Warning threshold"
+::= { ngNSCSfpStatusEntry 16 }
+
+ngNSCSfpStatusVoltageHighAlarm   OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Voltage reaches or overpasses the High Alarm threshold"
+::= { ngNSCSfpStatusEntry 17 }
+
+ngNSCSfpStatusVoltageLowAlarm    OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Voltage reaches or underpasses the Low Alarm threshold"
+::= { ngNSCSfpStatusEntry 18 }
+
+ngNSCSfpStatusVoltageHighWarn    OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Voltage reaches or overpasses the High Warning threshold"
+::= { ngNSCSfpStatusEntry 19 }
+
+ngNSCSfpStatusVoltageLowWarn     OBJECT-TYPE
+	SYNTAX TruthValue
+	MAX-ACCESS  read-only
+	STATUS      current
+	DESCRIPTION
+	"Voltage reaches or underpasses the Low Warning threshold"
+::= { ngNSCSfpStatusEntry 20 }
+
+-- Switch Interfaces Statistics  
+ngSwitchInterfaceStats    OBJECT IDENTIFIER
+-- STATUS current
+-- DESCRIPTION This is the root for switch interface statistics
+::= { ngSwitchSystem 1 }
+
+ngSwitchInterfaceStatsNumOfInterfaces  OBJECT-TYPE
+    SYNTAX     Integer32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+       "This object contains number of switch interfaces available in this unit.
+        This identifies the number of entries in ngSwitchInterfaceStatstable."
+::= { ngSwitchInterfaceStats 1 }
+
+ngSwitchInterfaceStatsTable   OBJECT-TYPE
+    SYNTAX  SEQUENCE OF NgSwitchInterfaceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS  current
+    DESCRIPTION
+       "This table has statistics plus information about each switch interfaces in this unit."
+::= { ngSwitchInterfaceStats 2 }
+
+ngSwitchInterfaceStatsEntry   OBJECT-TYPE
+    SYNTAX  NgSwitchInterfaceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS  current
+    DESCRIPTION
+        "An entry for each switch interface in this unit. 
+        Each entry contains information on interface name, speed, status,
+        statistcs (In/Out octets, In/Out unicast pkts, ...)."
+    INDEX   { ngSwitchInterfaceStatsSlotNumber, ngSwitchInterfaceStatsIfNumber }
+::= { ngSwitchInterfaceStatsTable 1}
+
+NgSwitchInterfaceStatsEntry ::=
+    SEQUENCE {
+        ngSwitchInterfaceStatsSlotNumber       Integer32,
+        ngSwitchInterfaceStatsIfNumber         Integer32,
+        ngSwitchInterfaceStatsIfName           OCTET STRING,
+        ngSwitchInterfaceStatsIfDescr          OCTET STRING,
+        ngSwitchInterfaceStatsIfStatus         INTEGER,
+        ngSwitchInterfaceStatsLinkState        INTEGER,
+        ngSwitchInterfaceStatsIfSpeed          Integer32,
+        ngSwitchInterfaceStatsInUnicastPkts    Counter64,
+        ngSwitchInterfaceStatsInMulticastPkts  Counter64,
+        ngSwitchInterfaceStatsInBroadcastPkts  Counter64,
+        ngSwitchInterfaceStatsInOctets         Counter64,
+        ngSwitchInterfaceStatsOutUnicastPkts   Counter64,
+        ngSwitchInterfaceStatsOutMulticastPkts Counter64,
+        ngSwitchInterfaceStatsOutBroadcastPkts Counter64,
+        ngSwitchInterfaceStatsOutOctets        Counter64
+	}
+
+ngSwitchInterfaceStatsSlotNumber    OBJECT-TYPE
+    SYNTAX     Integer32(0..96)
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+        "This object identifies the slot where the switch card is."
+::= { ngSwitchInterfaceStatsEntry 1 }
+
+ngSwitchInterfaceStatsIfNumber    OBJECT-TYPE
+    SYNTAX     Integer32(1..16)
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+        "This object with ngSwitchInterfaceStatSlotNumber unique identifies the switch interface."
+::= { ngSwitchInterfaceStatsEntry 2 }
+
+ngSwitchInterfaceStatsIfName    OBJECT-TYPE
+    SYNTAX     OCTET STRING
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Interface Name associated with this switch interface."
+::= { ngSwitchInterfaceStatsEntry 3 }
+
+ngSwitchInterfaceStatsIfDescr    OBJECT-TYPE
+    SYNTAX     OCTET STRING
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Configured Switch Interface Description."
+::= { ngSwitchInterfaceStatsEntry 4 }
+
+ngSwitchInterfaceStatsIfStatus    OBJECT-TYPE
+    SYNTAX     INTEGER {
+                disabled(0),
+                enabled(3)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Admin status of this switch  interface."
+::= { ngSwitchInterfaceStatsEntry 5 }
+
+ngSwitchInterfaceStatsLinkState    OBJECT-TYPE
+    SYNTAX     INTEGER {
+                unknow(0),
+                down(1),
+		up(2)
+    }
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Actual link state of this switch  interface."
+::= { ngSwitchInterfaceStatsEntry 6 }
+
+ngSwitchInterfaceStatsIfSpeed    OBJECT-TYPE
+    SYNTAX     Integer32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Actual speed of this switch  interface."
+::= { ngSwitchInterfaceStatsEntry 7 }
+
+ngSwitchInterfaceStatsInUnicastPkts    OBJECT-TYPE
+    SYNTAX     Counter64
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Number of good unicast packets received from this switch interface."
+::= { ngSwitchInterfaceStatsEntry 8 }
+
+ngSwitchInterfaceStatsInMulticastPkts    OBJECT-TYPE
+    SYNTAX     Counter64
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Number of good multicast packets received from this switch interface."
+::= { ngSwitchInterfaceStatsEntry 9 }
+
+ngSwitchInterfaceStatsInBroadcastPkts    OBJECT-TYPE
+    SYNTAX     Counter64
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Number of good broadcast packets received from this switch interface."
+::= { ngSwitchInterfaceStatsEntry 10 }
+
+ngSwitchInterfaceStatsInOctets    OBJECT-TYPE
+    SYNTAX     Counter64
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Number of octets received from this switch interface."
+::= { ngSwitchInterfaceStatsEntry 11 }
+
+ngSwitchInterfaceStatsOutUnicastPkts    OBJECT-TYPE
+    SYNTAX     Counter64
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Number of good unicast packets transmitted to this switch interface."
+::= { ngSwitchInterfaceStatsEntry 12 }
+
+ngSwitchInterfaceStatsOutMulticastPkts    OBJECT-TYPE
+    SYNTAX     Counter64
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Number of good multicast packets transmitted to this switch interface."
+::= { ngSwitchInterfaceStatsEntry 13 }
+
+ngSwitchInterfaceStatsOutBroadcastPkts    OBJECT-TYPE
+    SYNTAX     Counter64
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Number of good broadcast packets transmitted to this switch interface."
+::= { ngSwitchInterfaceStatsEntry 14 }
+
+ngSwitchInterfaceStatsOutOctets    OBJECT-TYPE
+    SYNTAX     Counter64
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Number of octets transmitted to this switch interface."
+::= { ngSwitchInterfaceStatsEntry 15 }
+
+-- conformance information
+
+nodegridMibConformance  OBJECT IDENTIFIER 
+::= { nodegridMib 100 }
+
+nodegridMibGroups       OBJECT IDENTIFIER 
+::= { nodegridMibConformance 1 }
+
+nodegridMibCompliances  OBJECT IDENTIFIER 
+::= { nodegridMibConformance 2 }
+
+-- compliance statements
+
+nodegridCompliance MODULE-COMPLIANCE
+    STATUS  current
+    DESCRIPTION 
+       "The compliance statement for objects related Nodegrid."
+    MODULE  -- this module
+    GROUP   nodegridInfoGroup
+    DESCRIPTION "Unit Information"
+    GROUP   nodegridInfoDeviceGroup
+    DESCRIPTION "Configured Devices Info"
+    GROUP   nodegridOpenSessionsGroup
+    DESCRIPTION "Open Sessions Info"
+    GROUP   nodegridEventsListGroup
+    DESCRIPTION "Events ocurrencies"
+    GROUP   nodegridLocalSerialStatsGroup  
+    DESCRIPTION "Local Serial Ports statistics"
+    GROUP   nodegridSfpInfoGroup  
+    DESCRIPTION "SFP Information"
+    GROUP   nodegridSfpDomGroup  
+    DESCRIPTION "SFP DOM Information"
+    GROUP   nodegridSfpStatusGroup  
+    DESCRIPTION "SFP Alarm Status"
+    GROUP   nodegridSwitchInterfaceStatsGroup  
+    DESCRIPTION "Switch Interfaces Statistics"
+::= { nodegridMibCompliances 1 }
+
+nodegridInfoGroup OBJECT-GROUP
+    OBJECTS {
+        ngInfoSystem,
+        ngInfoVersion,
+        ngInfoLicences,
+        ngInfoCPU,
+        ngInfoNumCPU,
+        ngInfoSerialNumber,
+        ngInfoPartNumber,
+        ngInfoPowerSupply1,
+        ngInfoPowerSupply2
+    }
+    STATUS current
+    DESCRIPTION          
+        "The collection of objects which have basic information about Nodegrid."
+::= { nodegridMibGroups 1 }
+
+nodegridInfoDeviceGroup OBJECT-GROUP
+    OBJECTS {
+        ngInfoDevicesNumOfDevices,
+        ngDeviceName,
+        ngDeviceStatus,
+        ngDeviceConnectThrough,
+        ngDeviceMode,
+        ngDeviceLicensed
+    }
+    STATUS current
+    DESCRIPTION          
+        "The collection of objects which have basic information about configured devices."
+::= { nodegridMibGroups 2 }
+
+nodegridOpenSessionsGroup OBJECT-GROUP
+    OBJECTS {
+        ngOpenSessionsNumOfSessions,
+        ngOpenSessionUser,
+        ngOpenSessionMode,
+        ngOpenSessionType,
+        ngOpenSessionSourceIP,
+        ngOpenSessionDevice,
+        ngOpenSessionStartTime
+    }
+    STATUS current
+    DESCRIPTION          
+        "The collection of objects which have basic information about open sessions."
+::= { nodegridMibGroups 3 }
+
+nodegridEventsListGroup OBJECT-GROUP
+    OBJECTS {
+        ngEventsListNumOfEvents,
+        ngEventDescription,
+        ngEventOcurrencies,
+        ngEventCategory
+    }
+    STATUS current
+    DESCRIPTION          
+        "The collection of objects which have basic information about events generated by this unit."
+::= { nodegridMibGroups 4 }
+
+nodegridLocalSerialStatsGroup OBJECT-GROUP
+    OBJECTS {
+        ngNSCStatsNumOfPorts,
+        ngNSCStatsDeviceName,
+        ngNSCStatsPortSpeed,
+        ngNSCStatsRxBytes,
+        ngNSCStatsTxBytes,
+        ngNSCStatsCTSVar,
+        ngNSCStatsDCDVar,
+        ngNSCStatsFrameE,
+        ngNSCStatsOverrun,
+        ngNSCStatsParityE,
+        ngNSCStatsBreakE,
+        ngNSCStatsBufferO,
+        ngNSCStatsDTR,
+        ngNSCStatsRTS,
+        ngNSCStatsDCD,
+        ngNSCStatsCTS
+    }
+    STATUS current
+    DESCRIPTION          
+        "The collection of objects which have local serial ports statistics."
+::= { nodegridMibGroups 6 }
+
+nodegridSfpInfoGroup OBJECT-GROUP
+    OBJECTS {
+	ngNSCSfpInfoIfName,
+        ngNSCSfpInfoId,
+	ngNSCSfpInfoIdExt,
+	ngNSCSfpInfoConnector,
+	ngNSCSfpInfoTransCode,
+	ngNSCSfpInfoTransType,
+	ngNSCSfpInfoEnconding,
+	ngNSCSfpInfoRateId,
+	ngNSCSfpInfoLaserWave,
+	ngNSCSfpInfoVendorName,
+	ngNSCSfpInfoVendorOUI,
+	ngNSCSfpInfoVendorPn,
+	ngNSCSfpInfoDOM,
+        ngNSCSfpInfoAlarm
+    }
+    STATUS current
+    DESCRIPTION          
+        "The collection of objects which have SFP information."
+::= { nodegridMibGroups 7 }
+
+nodegridSfpDomGroup OBJECT-GROUP
+    OBJECTS {
+        ngNSCSfpDomTemperatureC,
+        ngNSCSfpDomTemperatureF,
+        ngNSCSfpDomVoltage     ,
+        ngNSCSfpDomLaserBias   ,
+        ngNSCSfpDomTxPower     ,
+        ngNSCSfpDomRxPower     ,
+        ngNSCSfpDomTxPowerdBm  ,
+        ngNSCSfpDomRxPowerdBm  
+    }
+    STATUS current
+    DESCRIPTION          
+        "The collection of objects which have SFP DOM information."
+::= { nodegridMibGroups 8 }
+
+nodegridSfpStatusGroup OBJECT-GROUP
+    OBJECTS {
+         ngNSCSfpStatusLbiasHighAlarm        ,
+         ngNSCSfpStatusLbiasLowAlarm         ,
+         ngNSCSfpStatusLbiasHighWarn         ,
+         ngNSCSfpStatusLbiasLowWarn          ,
+         ngNSCSfpStatusTxPowerHighAlarm      ,
+         ngNSCSfpStatusTxPowerLowAlarm       ,
+         ngNSCSfpStatusTxPowerHighWarn       ,
+         ngNSCSfpStatusTxPowerLowWarn        ,
+         ngNSCSfpStatusRxPowerHighAlarm      ,
+         ngNSCSfpStatusRxPowerLowAlarm       ,
+         ngNSCSfpStatusRxPowerHighWarn       ,
+         ngNSCSfpStatusRxPowerLowWarn        ,
+         ngNSCSfpStatusTempHighAlarm         ,
+         ngNSCSfpStatusTempLowAlarm          ,
+         ngNSCSfpStatusTempHighWarn          ,
+         ngNSCSfpStatusTempLowWarn           ,
+         ngNSCSfpStatusVoltageHighAlarm      ,
+         ngNSCSfpStatusVoltageLowAlarm       ,
+         ngNSCSfpStatusVoltageHighWarn       ,
+         ngNSCSfpStatusVoltageLowWarn        
+    }
+    STATUS current
+    DESCRIPTION          
+        "The collection of objects which have SFP Alarm Status."
+::= { nodegridMibGroups 9 }
+
+nodegridSwitchInterfaceStatsGroup OBJECT-GROUP
+    OBJECTS {
+        ngSwitchInterfaceStatsNumOfInterfaces,
+        ngSwitchInterfaceStatsIfName,
+        ngSwitchInterfaceStatsIfDescr,
+        ngSwitchInterfaceStatsIfSpeed,
+        ngSwitchInterfaceStatsIfStatus,
+	ngSwitchInterfaceStatsLinkState,
+	ngSwitchInterfaceStatsInUnicastPkts,
+	ngSwitchInterfaceStatsInMulticastPkts,
+	ngSwitchInterfaceStatsInBroadcastPkts,
+	ngSwitchInterfaceStatsInOctets,
+	ngSwitchInterfaceStatsOutUnicastPkts,
+	ngSwitchInterfaceStatsOutMulticastPkts,
+	ngSwitchInterfaceStatsOutBroadcastPkts,
+	ngSwitchInterfaceStatsOutOctets
+    }
+    STATUS current
+    DESCRIPTION          
+        "The collection of objects which have switch interfaces statistics."
+::= { nodegridMibGroups 10 }
+
+END

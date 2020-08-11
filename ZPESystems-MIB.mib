@@ -1,0 +1,47 @@
+--  ********************************************************
+--  ZPE Systems Enterprise SNMP Management Identifiers
+--  IANA PEN 42518
+--  August 29, 2019
+--  Copyright (c) ...
+--    All rights reserved.
+--  ********************************************************
+
+ZPESystems-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+  MODULE-IDENTITY, enterprises FROM SNMPv2-SMI
+      ;
+
+zpeSystems MODULE-IDENTITY
+        LAST-UPDATED    "201908280000Z"
+        ORGANIZATION    "ZPE Systems Inc."
+        CONTACT-INFO
+            "ZPE Systems Support
+             E-mail: support@zpesystems.com"
+        DESCRIPTION
+            "The SNMP Management Identifiers (SMI) for the ZPE Systems enterprise.
+             This is the top-level registry for SNMP managed objects and other
+             SNMP related information modules under the ZPE Systems SNMP management
+             enterprise object identifier. Adopted by Nodegrid release 4.1.0."
+        REVISION        "201908280000Z"
+        DESCRIPTION
+            "First revision."
+
+::= { enterprises 42518 }      -- assigned by IANA
+
+zpeSystemsVersion  OBJECT IDENTIFIER
+--  STATUS      current
+--  DESCRIPTION
+--      "This is the root object identifier under which ZPE Systems
+--      SNMP managed object (MIB) modules are defined."
+    ::= { zpeSystems 4 }  -- version of Nodegrid (4.1.0)
+
+
+zpeSystemsMibs  OBJECT IDENTIFIER
+--  STATUS      current
+--  DESCRIPTION
+--      "This is the root object identifier under which ZPE Systems
+--      SNMP managed object (MIB) modules are defined."
+    ::= { zpeSystemsVersion 2 }
+
+END
