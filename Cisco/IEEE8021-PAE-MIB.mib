@@ -908,7 +908,7 @@ dot1xAuthBackendNonNakResponsesFromSupplicant OBJECT-TYPE
         EAP-NAK (i.e., rxResp becomes TRUE, causing the state
         machine to transition from REQUEST to RESPONSE,
         and the response is not an EAP-NAK). Indicates that
-        the Supplicant can respond to the Authenticator’s
+        the Supplicant can respond to the AuthenticatorÂ’s
         chosen EAP-method."
     REFERENCE
         "9.4.2, 8.5.6.2.4"
