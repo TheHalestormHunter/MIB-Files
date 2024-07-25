@@ -1,0 +1,1946 @@
+--  ************ HEADER ************************************
+--  ZPE Systems Nodegrid Notification MIB
+--  IANA PEN 42518
+--  August 29, 2019
+--  zpesystems OBJECT IDENTIFIER ::= { enterprises 42518 }
+--  ********************************************************
+
+Nodegrid-NOTIFICATION-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+  MODULE-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE FROM SNMPv2-SMI
+  Integer32 FROM SNMPv2-SMI
+  MODULE-COMPLIANCE, OBJECT-GROUP, NOTIFICATION-GROUP FROM SNMPv2-CONF
+  nodegridSystem FROM Nodegrid-MIB
+      ;
+
+nodegridNotification   MODULE-IDENTITY
+        LAST-UPDATED    "201908290000Z"
+        ORGANIZATION    "ZPE Systems Inc."
+        CONTACT-INFO
+            "ZPE Systems Support
+             E-mail: support@zpesystems.com"
+        DESCRIPTION     "Nodegrid Notification MIB extensions."
+        REVISION        "201908290000Z"
+        DESCRIPTION     "First revision."
+::= { nodegridSystem 120 }
+
+nodegridNotifPrefix       OBJECT IDENTIFIER ::= { nodegridNotification 0 }
+nodegridNotifObject       OBJECT IDENTIFIER ::= { nodegridNotification 2 }
+nodegridNotifConformance  OBJECT IDENTIFIER ::= { nodegridNotification 100 }
+nodegridNotifCompliances  OBJECT IDENTIFIER ::= { nodegridNotifConformance 1 }
+nodegridNotifGroups   OBJECT IDENTIFIER ::= { nodegridNotifConformance 2 }
+
+--
+-- nodegrid Notification Objects
+--
+
+nodegridNotifObjectUserName OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents a user who executed the action that triggered the event."
+::= { nodegridNotifObject 1 }
+
+nodegridNotifObjectGenericName OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents a generic name (context-dependent)."
+::= { nodegridNotifObject 2 }
+
+nodegridNotifObjectFileName OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents a file name (context-dependent)."
+::= { nodegridNotifObject 3 }
+
+
+nodegridNotifObjectDeviceName OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the monitored device name."
+::= { nodegridNotifObject 5 }
+
+nodegridNotifObjectDeviceType OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the monitored device type."
+::= { nodegridNotifObject 6 }
+
+nodegridNotifObjectSessionType OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the type of session where the user logged to the system."
+::= { nodegridNotifObject 7 }
+
+nodegridNotifSoftwareVersion OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the current Software version on the system."
+::= { nodegridNotifObject 10 }
+
+nodegridNotifNewSoftwareVersion OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the new Software version on the system."
+::= { nodegridNotifObject 11 }
+
+nodegridNotifSoftwareUpgradeStatus OBJECT-TYPE
+    SYNTAX INTEGER {
+               success(1),
+               error(2)
+           }
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the status of Software upgrade."
+::= { nodegridNotifObject 12 }
+
+nodegridNotifObjectLicenseType OBJECT-TYPE
+    SYNTAX INTEGER {
+               managedDevices(0),
+               clustering(1),
+               highAvailability(2)
+           }
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the license type."
+::= { nodegridNotifObject 13 }
+
+nodegridNotifObjectSerialNumber OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the serial number linked to the element in the event."
+::= { nodegridNotifObject 14 }
+
+nodegridNotifObjectLicenseCounts OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the number of elements licensed."
+::= { nodegridNotifObject 15 }
+
+nodegridNotifObjectLicenseExpiration OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the license expiration date."
+::= { nodegridNotifObject 16 }
+
+nodegridNotifObjectLicenseTotal OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the total number of licensed elements."
+::= { nodegridNotifObject 17 }
+
+nodegridNotifObjectLicenseAvailable OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the percentage of remaining licenses."
+::= { nodegridNotifObject 18 }
+
+nodegridNotifObjectLicenseDays OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the numbers of days until the license expires."
+::= { nodegridNotifObject 19 }
+
+nodegridNotifObjectAlertIndex OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the alert string index in the data log or event log alert configuration."
+::= { nodegridNotifObject 20 }
+
+nodegridNotifObjectAlertString OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the alert string in the data log or event log alert configuration."
+::= { nodegridNotifObject 21 }
+
+nodegridNotifObjectAlertMessage OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the complete text line that triggered the event."
+::= { nodegridNotifObject 22 }
+
+nodegridNotifObjectClusterName OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the cluster name."
+::= { nodegridNotifObject 23 }
+
+nodegridNotifObjectPeerName OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the peer name (host/domain)."
+::= { nodegridNotifObject 24 }
+
+nodegridNotifObjectPeerAddr OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the peer IP address."
+::= { nodegridNotifObject 25 }
+
+nodegridNotifObjectDurationTime OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the alert string index in the data log or event log alert configuration."
+::= { nodegridNotifObject 30 }
+
+nodegridNotifObjectPowerSupplyNumber OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the power supply number."
+::= { nodegridNotifObject 31 }
+
+nodegridNotifObjectPowerSupplyState OBJECT-TYPE
+    SYNTAX INTEGER{
+            poweredOff(0),
+            poweredOn(1)
+    }
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the power supply state."
+::= { nodegridNotifObject 32 }
+
+nodegridNotifObjectUtilizationRateAvail OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents percentage of available local serial ports."
+::= { nodegridNotifObject 33 }
+
+nodegridNotifObjectUtilizationRateTotalPorts OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents number of total local serial ports."
+::= { nodegridNotifObject 34 }
+
+nodegridNotifObjectUtilizationRateUsedPorts OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents number of used local serial ports."
+::= { nodegridNotifObject 35 }
+
+nodegridNotifObjectUnitTemperature OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents thermal zone temperature in 10 degrees Celsius."
+::= { nodegridNotifObject 36 }
+
+nodegridNotifObjectDatapointStateHost OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents datapoint's host name."
+::= { nodegridNotifObject 37 }
+
+nodegridNotifObjectDatapointStateInstance OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents datapoint's instance."
+::= { nodegridNotifObject 38 }
+
+nodegridNotifObjectDatapointStateType OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents datapoint's type."
+::= { nodegridNotifObject 39 }
+
+nodegridNotifObjectDatapointStateValue OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents datapoint's current value."
+::= { nodegridNotifObject 40 }
+
+nodegridNotifObjectDatapointStateThreshold OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents datapoint's threshold exceeded."
+::= { nodegridNotifObject 41 }
+
+nodegridNotifObjectHost OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the hostname associated with the event."
+::= { nodegridNotifObject 42 }
+
+nodegridNotifObjectIPAddress OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the IP address of the host associated with the event."
+::= { nodegridNotifObject 43 }
+
+nodegridNotifObjectDoor OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the door name."
+::= { nodegridNotifObject 44 }
+
+nodegridNotifObjectAccessID OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the identification of the access card."
+::= { nodegridNotifObject 45 }
+
+nodegridNotifObjectAlarmState OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the alarm state."
+::= { nodegridNotifObject 46 }
+
+nodegridNotifObjectAccessMode OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the access mode."
+::= { nodegridNotifObject 47 }
+
+nodegridNotifObjectSensorState OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the door's sensor state."
+::= { nodegridNotifObject 48 }
+
+nodegridNotifObjectLockState OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the door's lock state."
+::= { nodegridNotifObject 49 }
+
+nodegridNotifObjectFanNumber OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the Fan number."
+::= { nodegridNotifObject 50 }
+
+nodegridNotifObjectFanStatus OBJECT-TYPE
+    SYNTAX INTEGER{
+            failure(0),
+            normal(1)
+    }
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the Fan status."
+::= { nodegridNotifObject 51 }
+
+nodegridNotifObjectAuthMethod OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the Authentication Method used to authenticate the user."
+::= { nodegridNotifObject 52 }
+
+nodegridNotifObjectUUID OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the UUID of the node associated with the event."
+::= { nodegridNotifObject 53 }
+
+nodegridNotifObjectStatus OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the HTTP status code associated with the event."
+::= { nodegridNotifObject 54 }
+
+nodegridNotifObjectReason OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents a message that describes the reason that caused the event to be generated."
+::= { nodegridNotifObject 55 }
+
+nodegridNotifObjectSSDLifeLeft OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents SSD Life Left in percentage."
+::= { nodegridNotifObject 56 }
+
+nodegridNotifObjectDetectLocalSerialPorts OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents number of total detected local serial ports."
+::= { nodegridNotifObject 57 }
+
+nodegridNotifObjectLocalSerialPorts OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents number of total local serial ports."
+::= { nodegridNotifObject 58 }
+
+nodegridNotifObjectPowerBudget OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the power budget."
+::= { nodegridNotifObject 59 }
+
+nodegridNotifObjectTotalUsedPower OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the total used power."
+::= { nodegridNotifObject 60 }
+
+nodegridNotifObjectSMSphone OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the SMS sender's phone number."
+::= { nodegridNotifObject 61 }
+
+nodegridNotifObjectSMScommand OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the command in one valid SMS."
+::= { nodegridNotifObject 62 }
+
+nodegridNotifObjectSMSmessage OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the 20 first characters of one invalid SMS."
+::= { nodegridNotifObject 63 }
+
+nodegridNotifObjectDIOname OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the digital dry contact name."
+::= { nodegridNotifObject 64 }
+
+nodegridNotifObjectDIOdescription OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the digital dry contact description."
+::= { nodegridNotifObject 65 }
+
+nodegridNotifObjectDIOvariations OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the number of times the digital dry contact changed state."
+::= { nodegridNotifObject 66 }
+
+nodegridNotifObjectDIOstate OBJECT-TYPE
+    SYNTAX INTEGER{
+            low(0),
+            high(1)
+    }
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the current state fo the digital dry contact."
+::= { nodegridNotifObject 67 }
+
+nodegridNotifObjectConnectionName OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the connection name."
+::= { nodegridNotifObject 68 }
+
+nodegridNotifObjectInterfaceName OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the interface name."
+::= { nodegridNotifObject 69 }
+
+nodegridNotifObjectModemSlot OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the slot related to the connection on the context."
+::= { nodegridNotifObject 70 }
+
+nodegridNotifObjectSIMCardNumber OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the number of the SIM card related to the event ."
+::= { nodegridNotifObject 71 }
+
+nodegridNotifObjectSIMOperator OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the operator name related to the SIM card specified."
+::= { nodegridNotifObject 72 }
+
+nodegridNotifObjectSIMPhoneNumber OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the phone number of the SIM card specified."
+::= { nodegridNotifObject 73 }
+
+
+nodegridNotifObjectSIMSignalStrength OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION
+    "When reported in an event, this object represents the signal strength of the SIM card specified."
+::= { nodegridNotifObject 74 }
+
+
+
+--
+-- Notifications
+--
+-- System Notifcations: Group 1xx
+--
+notifnodegridRebootStarted NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUserName
+                }
+    STATUS current
+    DESCRIPTION
+    "Nodegrid is in process of rebooting.
+     The user who executed the command is reported in nodegridNotifObjectUserName."
+::= { nodegridNotifPrefix 100 }
+
+notifnodegridSystemStarted NOTIFICATION-TYPE
+    STATUS current
+    DESCRIPTION
+    "This notification is generated when the system is started."
+::= { nodegridNotifPrefix 101 }
+
+notifnodegridSoftwareUpgradeStarted NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectUserName,
+                nodegridNotifSoftwareVersion,
+                nodegridNotifNewSoftwareVersion
+               }
+   STATUS current
+   DESCRIPTION
+   "Software upgrade started.
+    The user who started the process is reported in nodegridNotifObjectUserName.
+    The current software version is reported in nodegridNotifSoftwareVersion.
+    The new software version is reported in nodegridNotifNewSoftwareVersion."
+::= { nodegridNotifPrefix 102 }
+
+notifnodegridSoftwareUpgradeCompleted NOTIFICATION-TYPE
+    OBJECTS   {
+                 nodegridNotifSoftwareUpgradeStatus,
+                 nodegridNotifNewSoftwareVersion
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated upon Software upgrade completion to report the process status.
+     The result of the process is reported in nodegridNotifSoftwareUpgradeStatus.
+     The new software version is reported in nodegridNotifNewSoftwareVersion."
+::= { nodegridNotifPrefix 103 }
+
+notifnodegridConfigurationStored NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectUserName,
+                 nodegridNotifObjectFileName
+               }
+   STATUS current
+   DESCRIPTION
+   "Save configuration settings completed successfully.
+    The user who requested to save the configuration settings into a file is reported in nodegridNotifObjectUserName.
+    The file where the configuration settings is saved is reported in nodegridNotifObjectFileName."
+::= { nodegridNotifPrefix 104 }
+
+notifnodegridConfigurationRestored NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectUserName,
+                 nodegridNotifObjectFileName
+               }
+   STATUS current
+   DESCRIPTION
+   "Apply configuration settings completed successfully.
+    The user who requested to apply the configuration settings is reported in nodegridNotifObjectUserName.
+    The file from where the configuration settings was restored is reported in nodegridNotifObjectFileName."
+::= { nodegridNotifPrefix 105 }
+
+notifnodegridZtpStarted NOTIFICATION-TYPE
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when the ZTP started."
+::= { nodegridNotifPrefix 106 }
+
+notifnodegridZtpCompleted NOTIFICATION-TYPE
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when the ZTP complete."
+::= { nodegridNotifPrefix 107 }
+
+notifnodegridConfigurationChanged NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUserName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when the configuration changes."
+::= { nodegridNotifPrefix 108 }
+
+notifnodegridSSDLifeLeft NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectSSDLifeLeft
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when the SSD Life Left attribute is less than 10 percentage"
+::= { nodegridNotifPrefix 109 }
+
+notifnodegridLocalUserAdded NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectUserName,
+                nodegridNotifObjectGenericName
+               }
+   STATUS current
+   DESCRIPTION
+   "A new user has been added to the system datastore.
+    The user who added the new user is reported in nodegridNotifObjectUserName.
+    The new username is reported in nodegridNotifObjectGenericName."
+::= { nodegridNotifPrefix 110 }
+
+notifnodegridLocalUserDeleted NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectUserName,
+                nodegridNotifObjectGenericName
+               }
+   STATUS current
+   DESCRIPTION
+   "A user has been deleted from the system datastore.
+    The user who deleted the user is reported in nodegridNotifObjectUserName.
+    The username deleted is reported in nodegridNotifObjectGenericName."
+::= { nodegridNotifPrefix 111 }
+
+notifnodegridLocalUserModified NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectUserName,
+                nodegridNotifObjectGenericName
+               }
+   STATUS current
+   DESCRIPTION
+   "A user has been changed in the system datastore.
+    The user who changed the data is reported in nodegridNotifObjectUserName.
+    The user who was changed is reported in nodegridNotifObjectGenericName."
+::= { nodegridNotifPrefix 112 }
+
+notifnodegridSessionTerminated NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectUserName,
+                 nodegridNotifObjectGenericName
+               }
+   STATUS current
+   DESCRIPTION
+   "Session terminated.
+    The user who closed the other user session is reported in nodegridNotifObjectUserName.
+    The user who had the session closed is reported in nodegridNotifObjectGenericName."
+::= { nodegridNotifPrefix 115 }
+
+notifnodegridSessionTimedOut NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectGenericName
+               }
+   STATUS current
+   DESCRIPTION
+   "Session timed out.
+    The user who had the session closed is reported in nodegridNotifObjectGenericName."
+::= { nodegridNotifPrefix 116 }
+
+notifnodegridPowerSupply NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectPowerSupplyNumber,
+                nodegridNotifObjectPowerSupplyState 
+               }
+   STATUS current
+   DESCRIPTION
+   "In units with dual-power supply, this notification is generated when the state of 
+    one power supply changes. 
+    The power supply number is reported in nodegridNotifObjectPowerSupplyNumber.
+    The new state is reported in nodegridNotifObjectPowerSupplyState. "
+::= { nodegridNotifPrefix 118 }
+
+notifnodegridPowerSupplyStop NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectUserName
+               }
+   STATUS current
+   DESCRIPTION
+   "In units with dual-power supply, this notification is generated when user acknowledge  
+    the power supply fail and stop the sound alarm. 
+    The name of the user that acknowledge is reported in nodegridNotifObjectUserName."
+::= { nodegridNotifPrefix 119 }
+
+notifnodegridUtilizationRateExceeded NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUtilizationRateTotalPorts,
+                  nodegridNotifObjectUtilizationRateUsedPorts,
+                  nodegridNotifObjectUtilizationRateAvail
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when the utilization rate of local serial ports exceeds configured trigger.
+     The total of local ports in the unit is reported in nodegridNotifObjectUtilizationRateTotalPorts.
+     The number of used local ports is reported in nodegridNotifObjectUtilizationRateUsedPorts.
+     The percentage of available local ports is reported in nodegridNotifObjectUtilizationRateAvail.
+    "
+::= { nodegridNotifPrefix 120 }
+
+notifnodegridTemperatureThrottleUp NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUnitTemperature
+              }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when thermal zone passive temperature is reached.
+    The unit starts throttle following governor step_wise. 
+    Thermal zone temperature is reported in nodegridNotifObjectUnitTemperature.
+    "
+::= { nodegridNotifPrefix 121 }
+
+notifnodegridTemperatureDropping NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUnitTemperature
+              }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when thermal zone temperature is dropping after one trip point was reached.
+    Thermal zone temperature is reported in nodegridNotifObjectUnitTemperature.
+    "
+::= { nodegridNotifPrefix 122 }
+
+notifnodegridTemperatureHotWarning NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUnitTemperature
+              }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when thermal zone hot temperature is reached.
+    The unit is close to critical trip point and may shutdown. 
+    Thermal zone temperature is reported in nodegridNotifObjectUnitTemperature.
+    "
+::= { nodegridNotifPrefix 123 }
+
+notifnodegridTemperatureCritical NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUnitTemperature
+              }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when thermal zone critical temperature is reached.
+    The system is shutding down.
+    Current thermal temperature is reported in nodegridNotifObjectUnitTemperature.
+    "
+::= { nodegridNotifPrefix 124 }
+
+notifnodegridFanAlarm NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectFanNumber,
+                nodegridNotifObjectFanStatus 
+               }
+   STATUS current
+   DESCRIPTION
+   "In units with fans, this notification is generated when the state of on fan changes. 
+    The fan id number is reported in nodegridNotifObjectFanNumber.
+    The new state is reported in nodegridNotifObjectFanStatus. "
+::= { nodegridNotifPrefix 126 }
+
+notifnodegridFanAlarmStop NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectUserName
+               }
+   STATUS current
+   DESCRIPTION
+   "In units with fans, this notification is generated when user acknowledge  
+    a fan failure and stop the sound alarm. 
+    The name of the user that acknowledge is reported in nodegridNotifObjectUserName."
+::= { nodegridNotifPrefix 127 }
+
+notifnodegridLocalSerialPortsFailDetection NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectLocalSerialPorts,
+              	nodegridNotifObjectDetectLocalSerialPorts
+               }
+   STATUS current
+   DESCRIPTION
+   "In units with local serial ports, this notification is generated when there is a  
+    mismatch between the total number detected by the serial driver and the actual number. 
+    The number detected by serial driver is reported in nodegridNotifObjectDetectLocalSerialPorts.
+    The actual number is reported in nodegridNotifObjectLocalSerialPorts."
+::= { nodegridNotifPrefix 128 }
+
+notifnodegridDryContactChangedState NOTIFICATION-TYPE
+   OBJECTS   {
+	nodegridNotifObjectDIOname,
+	nodegridNotifObjectDIOdescription,
+	nodegridNotifObjectDIOvariations,
+	nodegridNotifObjectDIOstate
+        }
+   STATUS current
+   DESCRIPTION
+   "In units with I/O ports, this notification is generated when one of the dry contacts in input mode has 
+    its states changed. The name of the dry contact is reported in nodegridNotifObjectDIOname.
+    The description of the dry contact is reported in nodegridNotifObjectDIOdescription.
+    The number of times the dry contact changed stated is reported in nodegridNotifObjectDIOvariations.
+    The current state of the dry contact is reported in nodegridNotifObjectDIOstate."
+::= { nodegridNotifPrefix 129 }
+
+--
+-- License notifications - starting 130
+--
+
+notifnodegridLicenseAdded NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectLicenseType,
+                  nodegridNotifObjectSerialNumber,
+                  nodegridNotifObjectLicenseCounts,
+                  nodegridNotifObjectLicenseExpiration
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when a license key is added to the system.
+     The license type is reported in nodegridNotifObjectLicenseType.
+     The license serial number is reported in nodegridNotifObjectSerialNumber.
+     The number of elements licensed is reported in nodegridNotifObjectLicenseCounts.
+     The license expiration (if any) is reported in nodegridNotifObjectLicenseExpiration."
+::= { nodegridNotifPrefix 130 }
+
+notifnodegridLicenseRemoved NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectLicenseType,
+                  nodegridNotifObjectSerialNumber,
+                  nodegridNotifObjectLicenseCounts,
+                  nodegridNotifObjectLicenseExpiration
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when a license key is removed from the system.
+     The license type is reported in nodegridNotifObjectLicenseType.
+     The license serial number is reported in nodegridNotifObjectSerialNumber.
+     The number of elements licensed is reported in nodegridNotifObjectLicenseCounts.
+     The license expiration (if any) is reported in nodegridNotifObjectLicenseExpiration."
+::= { nodegridNotifPrefix 131 }
+
+notifnodegridLicenseConflict NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectGenericName,
+                  nodegridNotifObjectLicenseType,
+                  nodegridNotifObjectSerialNumber,
+                  nodegridNotifObjectLicenseCounts,
+                  nodegridNotifObjectLicenseExpiration
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when a license key is conflicting in another system and therefore has been deactivated.
+     The information (IP address or hostname) where the license is duplicated is reported in nodegridNotifObjectGenericName.
+     The license type is reported in nodegridNotifObjectLicenseType.
+     The license serial number is reported in nodegridNotifObjectSerialNumber.
+     The number of elements licensed is reported in nodegridNotifObjectLicenseCounts.
+     The license expiration (if any) is reported in nodegridNotifObjectLicenseExpiration."
+::= { nodegridNotifPrefix 132 }
+
+notifnodegridLicenseScarce NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectLicenseType,
+                  nodegridNotifObjectLicenseTotal,
+                  nodegridNotifObjectLicenseCounts,
+                  nodegridNotifObjectLicenseAvailable
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when the number of available licenses is scarce.
+     The license type is reported in nodegridNotifObjectLicenseType.
+     The total number of elements licensed is reported in nodegridNotifObjectLicenseTotal.
+     The counts of used licenses is reported in nodegridNotifObjectLicenseCounts.
+     The percentage of available licenses is reported in nodegridNotifObjectLicenseAvailable."
+::= { nodegridNotifPrefix 133 }
+
+notifnodegridLicenseExpiring NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectLicenseType,
+                  nodegridNotifObjectSerialNumber,
+                  nodegridNotifObjectLicenseCounts,
+                  nodegridNotifObjectLicenseExpiration,
+                  nodegridNotifObjectLicenseDays
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when a license key is about to expire.
+     The license type is reported in nodegridNotifObjectLicenseType.
+     The license serial number is reported in nodegridNotifObjectSerialNumber.
+     The number of elements licensed is reported in nodegridNotifObjectLicenseCounts.
+     The license expiration is reported in nodegridNotifObjectLicenseExpiration.
+     The remaining days until expiration is reported in nodegridNotifObjectLicenseDays."
+::= { nodegridNotifPrefix 134 }
+
+notifnodegridShellStarted NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUserName,
+                  nodegridNotifObjectIPAddress,
+                  nodegridNotifObjectGenericName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when a shell session is started.
+     The user who started the shell is reported in nodegridNotifObjectUserName.
+     The client IP address is reported in nodegridNotifObjectIPAddress.
+     The command passed to the shell is reported in nodegridNotifObjectGenericName."
+::= { nodegridNotifPrefix 135 }
+
+notifnodegridShellStopped NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUserName,
+                  nodegridNotifObjectIPAddress
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when a shell session is stopped.
+     The user who started the shell is reported in nodegridNotifObjectUserName.
+     The client IP address is reported in nodegridNotifObjectIPAddress."
+::= { nodegridNotifPrefix 136 }
+
+notifnodegridSudoExecuted NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUserName,
+                  nodegridNotifObjectIPAddress,
+                  nodegridNotifObjectGenericName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when a sudo command is executed.
+     The user who executed the sudo command is reported in nodegridNotifObjectUserName.
+     The client IP address is reported in nodegridNotifObjectIPAddress.
+     The command passed to sudo is reported in nodegridNotifObjectGenericName."
+::= { nodegridNotifPrefix 137 }
+
+notifnodegridSMSExecuted NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectGenericName,
+                  nodegridNotifObjectSMSphone,
+                  nodegridNotifObjectSMScommand
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when one SMS command is executed.
+     The name linked to the phone number in the whitelist is reported in nodegridNotifObjectGenericName.
+     The phone number of the SMS sender is reported in nodegridNotifObjectSMSphone.
+     The command in the SMS message is reported in nodegridNotifObjectSMScommand."
+::= { nodegridNotifPrefix 138 }
+
+notifnodegridSMSInvalid NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectSMSphone,
+                  nodegridNotifObjectSMSmessage
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is generated when it receives one invalid SMS.
+     The phone number of the SMS sender is reported in nodegridNotifObjectSMSphone.
+     The 20 first characters of the invalid SMS message is reported in nodegridNotifObjectSMSmessage."
+::= { nodegridNotifPrefix 139 }
+
+--
+-- Network notifications - starting 140
+--
+
+notifnodegridConnectionUp NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectConnectionName,
+                nodegridNotifObjectInterfaceName,
+                nodegridNotifObjectGenericName,
+                nodegridNotifObjectIPAddress
+               }
+   STATUS current
+   DESCRIPTION
+   "This notification is generated when the state of a connection changes to up.
+    The new state is reported in nodegridNotifObjectGenericName "
+::= { nodegridNotifPrefix 140 }
+
+notifnodegridConnectionDown NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectConnectionName,
+                nodegridNotifObjectInterfaceName,
+                nodegridNotifObjectGenericName
+               }
+   STATUS current
+   DESCRIPTION
+   "This notification is generated when the state of a connection changes to down.
+    The new state is reported in nodegridNotifObjectGenericName "
+::= { nodegridNotifPrefix 141 }
+
+notifnodegridSIMSwap NOTIFICATION-TYPE
+   OBJECTS   {
+                nodegridNotifObjectModemSlot,
+		nodegridNotifObjectSIMCardNumber,
+                nodegridNotifObjectSIMCardNumber,
+		nodegridNotifObjectSIMOperator,
+		nodegridNotifObjectSIMPhoneNumber,
+		nodegridNotifObjectSIMSignalStrength,
+		nodegridNotifObjectGenericName
+               }
+   STATUS current
+   DESCRIPTION
+   "This notification is generated when the SIM card is swapped.
+    The old SIM is reported in nodegridNotifObjectModemSlot.
+    The old SIM is reported in nodegridNotifObjectSIMCardNumber.
+    The new SIM is reported in nodegridNotifObjectSIMCardNumber.
+    The operator is displayed on nodegridNotifObjectSIMOperator.
+    The phone number is displayed on nodegridNotifObjectSIMPhoneNumber.
+    The reason for the swap is displayed on nodegridNotifObjectGenericName."
+::= { nodegridNotifPrefix 142 }
+
+--
+-- Cluster notifications - starting 150
+--
+
+notifnodegridClusterPeerOnline NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectClusterName,
+                  nodegridNotifObjectPeerAddr,
+                  nodegridNotifObjectPeerName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a cluster peer is online
+     The cluster name is reported in nodegridNotifObjectClusterName.
+     The peer name is reported in nodegridNotifObjectPeerName.
+     The peer IP address is reported in nodegridNotifObjectPeerAddr."
+::= { nodegridNotifPrefix 150 }
+
+notifnodegridClusterPeerOffline NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectClusterName,
+                  nodegridNotifObjectPeerAddr,
+                  nodegridNotifObjectPeerName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a cluster peer is offline
+     The cluster name is reported in nodegridNotifObjectClusterName.
+     The peer name is reported in nodegridNotifObjectPeerName.
+     The peer IP address is reported in nodegridNotifObjectPeerAddr."
+::= { nodegridNotifPrefix 151 }
+
+notifnodegridClusterPeerSignOn NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectClusterName,
+                  nodegridNotifObjectPeerAddr,
+                  nodegridNotifObjectPeerName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a peer signs on the cluster
+     The cluster name is reported in nodegridNotifObjectClusterName.
+     The peer name is reported in nodegridNotifObjectPeerName.
+     The peer IP address is reported in nodegridNotifObjectPeerAddr."
+::= { nodegridNotifPrefix 152 }
+
+notifnodegridClusterPeerSignOff NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectClusterName,
+                  nodegridNotifObjectPeerAddr,
+                  nodegridNotifObjectPeerName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a peer signs off the cluster
+     The cluster name is reported in nodegridNotifObjectClusterName.
+     The peer name is reported in nodegridNotifObjectPeerName.
+     The peer IP address is reported in nodegridNotifObjectPeerAddr."
+::= { nodegridNotifPrefix 153 }
+
+notifnodegridClusterPeerRemoved NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectClusterName,
+                  nodegridNotifObjectPeerAddr,
+                  nodegridNotifObjectPeerName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a peer is removed from cluster
+     The cluster name is reported in nodegridNotifObjectClusterName.
+     The peer name is reported in nodegridNotifObjectPeerName.
+     The peer IP address is reported in nodegridNotifObjectPeerAddr."
+::= { nodegridNotifPrefix 154 }
+
+notifnodegridClusterNewCoordinator NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectClusterName,
+                  nodegridNotifObjectPeerAddr,
+                  nodegridNotifObjectPeerName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a cluster peer becomes coordinator
+     The cluster name is reported in nodegridNotifObjectClusterName.
+     The peer name is reported in nodegridNotifObjectPeerName.
+     The peer IP address is reported in nodegridNotifObjectPeerAddr."
+::= { nodegridNotifPrefix 155 }
+
+notifnodegridClusterCoordinatorToPeer NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectClusterName,
+                  nodegridNotifObjectPeerAddr,
+                  nodegridNotifObjectPeerName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a cluster coordinator becomes peer
+     The cluster name is reported in nodegridNotifObjectClusterName.
+     The peer name is reported in nodegridNotifObjectPeerName.
+     The peer IP address is reported in nodegridNotifObjectPeerAddr."
+::= { nodegridNotifPrefix 156 }
+
+notifnodegridClusterCoordinatorDeleted NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectClusterName,
+                  nodegridNotifObjectPeerAddr,
+                  nodegridNotifObjectPeerName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a cluster coordinator is deleted
+     The cluster name is reported in nodegridNotifObjectClusterName.
+     The peer name is reported in nodegridNotifObjectPeerName.
+     The peer IP address is reported in nodegridNotifObjectPeerAddr."
+::= { nodegridNotifPrefix 157 }
+
+notifnodegridClusterCoordinatorCreated NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectClusterName,
+                  nodegridNotifObjectPeerAddr,
+                  nodegridNotifObjectPeerName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a cluster coordinator is created
+     The cluster name is reported in nodegridNotifObjectClusterName.
+     The peer name is reported in nodegridNotifObjectPeerName.
+     The peer IP address is reported in nodegridNotifObjectPeerAddr."
+::= { nodegridNotifPrefix 158 }
+
+notifnodegridClusterPeerConfig NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectClusterName,
+                  nodegridNotifObjectPeerAddr,
+                  nodegridNotifObjectPeerName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a cluster peer configuration changed
+     The cluster name is reported in nodegridNotifObjectClusterName.
+     The peer name is reported in nodegridNotifObjectPeerName.
+     The peer IP address is reported in nodegridNotifObjectPeerAddr."
+::= { nodegridNotifPrefix 159 }
+
+notifnodegridSearchUnavailable NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectHost,
+                  nodegridNotifObjectUUID,
+                  nodegridNotifObjectStatus,
+                  nodegridNotifObjectReason
+              }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when search is unavailable.
+     The node's hostname is reported in nodegridNotifObjectHost.
+     The node's UUID is reported in nodegridNotifObjectUUID.
+     The search's status code is reported in nodegridNotifObjectStatus.
+     The reason is reported in nodegridNotifObjectReason."
+::= { nodegridNotifPrefix 160 }
+
+notifnodegridSearchRestored NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectHost,
+                  nodegridNotifObjectUUID
+              }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when search has been restored.
+     The node's hostname is reported in nodegridNotifObjectHost.
+     The node's UUID is reported in nodegridNotifObjectUUID."
+::= { nodegridNotifPrefix 161 }
+
+--
+-- AAA Notifications - Group 2xx
+--
+notifnodegridUserLogin NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUserName,
+                  nodegridNotifObjectSessionType,
+                  nodegridNotifObjectAuthMethod
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when user logged into the system.
+     The user who logged in is reported in nodegridNotifObjectUserName.
+     The session type used to log in is reported in nodegridNotifObjectSessionType.
+     The authentication method used to authenticate the user is reported in nodegridNotifObjectAuthMethod."
+::= { nodegridNotifPrefix 200 }
+
+notifnodegridUserLogout NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUserName,
+                  nodegridNotifObjectSessionType
+                }
+   STATUS current
+    DESCRIPTION
+    "A user logged out of the system.
+     The user who logged in is reported in nodegridNotifObjectUserName.
+     The session type where the user was logged is reported in nodegridNotifObjectSessionType."
+::= { nodegridNotifPrefix 201 }
+
+notifnodegridAuthenticationFailure NOTIFICATION-TYPE
+    OBJECTS   {
+                 nodegridNotifObjectUserName
+                }
+   STATUS current
+    DESCRIPTION
+    "A user failed to authenticate.
+     The user who failed to authenticate is reported in nodegridNotifObjectUserName."
+::= { nodegridNotifPrefix 202 }
+
+--
+-- Device session Notifications: Group 3xx
+--
+notifnodegridDeviceSessionStarted NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectUserName,
+                  nodegridNotifObjectDeviceName,
+                  nodegridNotifObjectDeviceType
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a device session starts.
+     The name of the user who is connected to the session is reported in nodegridNotifObjectUserName.
+     The device name is reported in nodegridNotifObjectDeviceName.
+     The type of the device is reported in nodegridNotifObjectDeviceType."
+::= { nodegridNotifPrefix 300 }
+
+notifnodegridDeviceSessionStopped NOTIFICATION-TYPE
+    OBJECTS   {
+                 nodegridNotifObjectUserName,
+                 nodegridNotifObjectDeviceName,
+                 nodegridNotifObjectDeviceType,
+                 nodegridNotifObjectDurationTime
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a device session stops.
+     The user who was connected to the session is reported in nodegridNotifObjectUserName.
+     The device name is reported in nodegridNotifObjectDeviceName.
+     The type of the device is reported in nodegridNotifObjectDeviceType.
+     The session duration is reported in nodegridNotifObjectDurationTime."
+::= { nodegridNotifPrefix 301 }
+
+notifnodegridDeviceCreated NOTIFICATION-TYPE
+    OBJECTS   {
+                 nodegridNotifObjectUserName,
+                 nodegridNotifObjectDeviceName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a new device is created.
+     The user who created the device is reported in nodegridNotifObjectUserName.
+     The device name is reported in nodegridNotifObjectDeviceName."
+::= { nodegridNotifPrefix 302 }
+
+notifnodegridDeviceDeleted NOTIFICATION-TYPE
+    OBJECTS   {
+                 nodegridNotifObjectUserName,
+                 nodegridNotifObjectDeviceName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a device is deleted.
+     The user who deleted the device is reported in nodegridNotifObjectUserName.
+     The device name is reported in nodegridNotifObjectDeviceName."
+::= { nodegridNotifPrefix 303 }
+
+notifnodegridDeviceRenamed NOTIFICATION-TYPE
+    OBJECTS   {
+                 nodegridNotifObjectUserName,
+                 nodegridNotifObjectDeviceName,
+                 nodegridNotifObjectGenericName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a device is deleted.
+     The user who deleted the device is reported in nodegridNotifObjectUserName.
+     The new device name is reported in nodegridNotifObjectDeviceName.
+     The previous device name is reported in nodegridNotifObjectGenericName."
+::= { nodegridNotifPrefix 304 }
+
+notifnodegridDeviceCloned NOTIFICATION-TYPE
+    OBJECTS   {
+                 nodegridNotifObjectDeviceName,
+                 nodegridNotifObjectGenericName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when a device is cloned from autodiscovery process.
+     The new device name is reported in nodegridNotifObjectDeviceName.
+     The device name from where the new device is cloned from is reported in  nodegridNotifObjectGenericName."
+::= { nodegridNotifPrefix 305 }
+
+notifnodegridDeviceUp NOTIFICATION-TYPE
+    OBJECTS   {
+                 nodegridNotifObjectDeviceName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when nodegrid establishes a connection to a device.
+     The device name is reported in nodegridNotifObjectDeviceName."
+::= { nodegridNotifPrefix 306 }
+
+notifnodegridDeviceDown NOTIFICATION-TYPE
+    OBJECTS   {
+                 nodegridNotifObjectDeviceName
+                }
+   STATUS current
+    DESCRIPTION
+    "This notification is sent when the connection between nodegrid and a device is lost.
+     The device name is reported in nodegridNotifObjectDeviceName."
+::= { nodegridNotifPrefix 307 }
+
+notifnodegridDeviceSessionTerminated NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectDeviceName,
+                 nodegridNotifObjectUserName,
+                 nodegridNotifObjectGenericName
+               }
+   STATUS current
+   DESCRIPTION
+   "Device session terminated. 
+    The device name is reported in nodegridNotifObjectDeviceName.
+    The user who closed the other user device session is reported in nodegridNotifObjectUserName.
+    The user who had the device session closed is reported in nodegridNotifObjectGenericName."
+::= { nodegridNotifPrefix 308 }
+
+notifnodegridPowerOnCmd NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectDeviceName,
+                  nodegridNotifObjectUserName
+                }
+   STATUS current
+    DESCRIPTION
+    "An user executed a command to power on a managed device.
+     The device name is reported in nodegridNotifObjectDeviceName.
+     The user who executed the command is reported in nodegridNotifObjectUserName."
+::= { nodegridNotifPrefix 310 }
+
+notifnodegridPowerOffCmd NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectDeviceName,
+                  nodegridNotifObjectUserName
+                }
+   STATUS current
+    DESCRIPTION
+    "An user executed a command to power off a managed device.
+     The device name is reported in nodegridNotifObjectDeviceName.
+     The user who executed the command is reported in nodegridNotifObjectUserName."
+::= { nodegridNotifPrefix 311 }
+
+notifnodegridPowerCycleCmd NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectDeviceName,
+                  nodegridNotifObjectUserName
+                }
+   STATUS current
+    DESCRIPTION
+    "An user executed a command to power cycle a managed device.
+     The device name is reported in nodegridNotifObjectDeviceName.
+     The user who executed the command is reported in nodegridNotifObjectUserName."
+::= { nodegridNotifPrefix 312 }
+
+notifnodegridSuspendCmd NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectDeviceName,
+                  nodegridNotifObjectUserName
+                }
+   STATUS current
+    DESCRIPTION
+    "An user executed a command to suspend a managed device.
+     The device name is reported in nodegridNotifObjectDeviceName.
+     The user who executed the command is reported in nodegridNotifObjectUserName."
+::= { nodegridNotifPrefix 313 }
+
+notifnodegridResetCmd NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectDeviceName,
+                  nodegridNotifObjectUserName
+                }
+   STATUS current
+    DESCRIPTION
+    "An user executed a command to reset a managed device.
+     The device name is reported in nodegridNotifObjectDeviceName.
+     The user who executed the command is reported in nodegridNotifObjectUserName."
+::= { nodegridNotifPrefix 314 }
+
+notifnodegridShutdownCmd NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectDeviceName,
+                  nodegridNotifObjectUserName
+                }
+   STATUS current
+    DESCRIPTION
+    "An user executed a command to shutdown a managed device.
+     The device name is reported in nodegridNotifObjectDeviceName.
+     The user who executed the command is reported in nodegridNotifObjectUserName."
+::= { nodegridNotifPrefix 315 }
+
+--
+-- Alert and Event Logging Notifications - Group # 4xx
+--
+notifnodegridSystemAlert NOTIFICATION-TYPE
+    OBJECTS   {
+                 nodegridNotifObjectUserName,
+                 nodegridNotifObjectAlertIndex,
+                 nodegridNotifObjectAlertString,
+                 nodegridNotifObjectAlertMessage
+                }
+   STATUS current
+    DESCRIPTION
+    "A system alert was detected on a session.
+     The user who was logged into that session is reported in nodegridNotifObjectUserName.
+     The index of the alert that was detected in the message is reported in nodegridNotifObjectAlertIndex.
+     The system alert that was detected is reported in nodegridNotifObjectAlertString.
+     The line text where the system alert was detected is reported in nodegridNotifObjectAlertMessage."
+::= { nodegridNotifPrefix 400 }
+
+notifnodegridAlertString NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectDeviceName,
+                  nodegridNotifObjectAlertIndex,
+                  nodegridNotifObjectAlertString,
+                  nodegridNotifObjectAlertMessage
+                }
+   STATUS current
+    DESCRIPTION
+    "An alert string was detected on a device session.
+     The device name is reported in nodegridNotifObjectDeviceName
+     The index of the alert string that was detected is reported in nodegridNotifObjectAlertIndex.
+     The alert string that was detected is reported in nodegridNotifObjectAlertString.
+     The line text where the alert string was detected is reported in nodegridNotifObjectAlertMessage."
+::= { nodegridNotifPrefix 401 }
+
+notifnodegridEventString NOTIFICATION-TYPE
+    OBJECTS   {
+                  nodegridNotifObjectDeviceName,
+                  nodegridNotifObjectAlertIndex,
+                  nodegridNotifObjectAlertString,
+                  nodegridNotifObjectAlertMessage
+                }
+   STATUS current
+    DESCRIPTION
+    "An event log alert string was detected on a device event log.
+     The device name is reported in nodegridNotifObjectDeviceName
+     The event log alert string index that was detected is reported in nodegridNotifObjectAlertIndex.
+     The event log alert string that was detected is reported in nodegridNotifObjectAlertString.
+     The line text where the event log alert string was detected is reported in nodegridNotifObjectAlertMessage."
+::= { nodegridNotifPrefix 402 }
+
+notifnodegridLoggingNFSFailure NOTIFICATION-TYPE
+   STATUS current
+    DESCRIPTION
+    "Error writting logging message to NFS server."
+::= { nodegridNotifPrefix 410 }
+
+notifnodegridLoggingNFSRecovered NOTIFICATION-TYPE
+   STATUS current
+    DESCRIPTION
+    "NFS connection with server recovered."
+::= { nodegridNotifPrefix 411 }
+
+notifnodegridDatapointStateHighCritical NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectDatapointStateHost,
+                 nodegridNotifObjectDatapointStateInstance,
+                 nodegridNotifObjectDatapointStateType,
+                 nodegridNotifObjectDatapointStateValue,
+                 nodegridNotifObjectDatapointStateThreshold
+             }
+   STATUS current
+    DESCRIPTION
+    "Datapoint state high critical"
+::= { nodegridNotifPrefix 450 }
+
+notifnodegridDatapointStateHighWarning NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectDatapointStateHost,
+                 nodegridNotifObjectDatapointStateInstance,
+                 nodegridNotifObjectDatapointStateType,
+                 nodegridNotifObjectDatapointStateValue,
+                 nodegridNotifObjectDatapointStateThreshold
+             }
+   STATUS current
+    DESCRIPTION
+    "Datapoint state high warning"
+::= { nodegridNotifPrefix 451 }
+
+notifnodegridDatapointStateNormal NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectDatapointStateHost,
+                 nodegridNotifObjectDatapointStateInstance,
+                 nodegridNotifObjectDatapointStateType,
+                 nodegridNotifObjectDatapointStateValue
+             }
+   STATUS current
+    DESCRIPTION
+    "Datapoint state normal"
+::= { nodegridNotifPrefix 452 }
+
+notifnodegridDatapointStateLowWarning NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectDatapointStateHost,
+                 nodegridNotifObjectDatapointStateInstance,
+                 nodegridNotifObjectDatapointStateType,
+                 nodegridNotifObjectDatapointStateValue,
+                 nodegridNotifObjectDatapointStateThreshold
+             }
+   STATUS current
+    DESCRIPTION
+    "Datapoint state low warning"
+::= { nodegridNotifPrefix 453 }
+
+notifnodegridDatapointStateLowCritical NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectDatapointStateHost,
+                 nodegridNotifObjectDatapointStateInstance,
+                 nodegridNotifObjectDatapointStateType,
+                 nodegridNotifObjectDatapointStateValue,
+                 nodegridNotifObjectDatapointStateThreshold
+             }
+   STATUS current
+    DESCRIPTION
+    "Datapoint state low critical"
+::= { nodegridNotifPrefix 454 }
+
+
+notifnodegridDoorUnlocked NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectHost,
+                 nodegridNotifObjectIPAddress,
+                 nodegridNotifObjectDoor,
+                 nodegridNotifObjectAccessID,
+                 nodegridNotifObjectAlarmState,
+                 nodegridNotifObjectAccessMode,
+                 nodegridNotifObjectSensorState,
+                 nodegridNotifObjectLockState
+             }
+   STATUS current
+    DESCRIPTION
+    "Door unlocked"
+::= { nodegridNotifPrefix 460 }
+
+notifnodegridDoorLocked NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectHost,
+                 nodegridNotifObjectIPAddress,
+                 nodegridNotifObjectDoor,
+                 nodegridNotifObjectAccessID,
+                 nodegridNotifObjectAlarmState,
+                 nodegridNotifObjectAccessMode,
+                 nodegridNotifObjectSensorState,
+                 nodegridNotifObjectLockState
+             }
+   STATUS current
+    DESCRIPTION
+    "Door locked"
+::= { nodegridNotifPrefix 461 }
+
+notifnodegridDoorOpen NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectHost,
+                 nodegridNotifObjectIPAddress,
+                 nodegridNotifObjectDoor,
+                 nodegridNotifObjectAccessID,
+                 nodegridNotifObjectAlarmState,
+                 nodegridNotifObjectAccessMode,
+                 nodegridNotifObjectSensorState,
+                 nodegridNotifObjectLockState
+             }
+   STATUS current
+    DESCRIPTION
+    "Door open"
+::= { nodegridNotifPrefix 462 }
+
+notifnodegridDoorClose NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectHost,
+                 nodegridNotifObjectIPAddress,
+                 nodegridNotifObjectDoor,
+                 nodegridNotifObjectAccessID,
+                 nodegridNotifObjectAlarmState,
+                 nodegridNotifObjectAccessMode,
+                 nodegridNotifObjectSensorState,
+                 nodegridNotifObjectLockState
+             }
+   STATUS current
+    DESCRIPTION
+    "Door close"
+::= { nodegridNotifPrefix 463 }
+
+notifnodegridDoorAccessDenied NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectHost,
+                 nodegridNotifObjectIPAddress,
+                 nodegridNotifObjectDoor,
+                 nodegridNotifObjectAccessID,
+                 nodegridNotifObjectAlarmState,
+                 nodegridNotifObjectAccessMode,
+                 nodegridNotifObjectSensorState,
+                 nodegridNotifObjectLockState
+             }
+   STATUS current
+    DESCRIPTION
+    "Door access denied"
+::= { nodegridNotifPrefix 464 }
+
+notifnodegridDoorAlarmActive NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectHost,
+                 nodegridNotifObjectIPAddress,
+                 nodegridNotifObjectDoor,
+                 nodegridNotifObjectAccessID,
+                 nodegridNotifObjectAlarmState,
+                 nodegridNotifObjectAccessMode,
+                 nodegridNotifObjectSensorState,
+                 nodegridNotifObjectLockState
+             }
+   STATUS current
+    DESCRIPTION
+    "Door alarm active"
+::= { nodegridNotifPrefix 465 }
+
+notifnodegridDoorAlarmInactive NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectHost,
+                 nodegridNotifObjectIPAddress,
+                 nodegridNotifObjectDoor,
+                 nodegridNotifObjectAccessID,
+                 nodegridNotifObjectAlarmState,
+                 nodegridNotifObjectAccessMode,
+                 nodegridNotifObjectSensorState,
+                 nodegridNotifObjectLockState
+             }
+   STATUS current
+    DESCRIPTION
+    "Door alarm inactive"
+::= { nodegridNotifPrefix 466 }
+
+notifnodegridPoEPowerFault NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectGenericName,
+                 nodegridNotifObjectReason
+             }
+   STATUS current
+    DESCRIPTION
+    "PoE Power Fault
+     The interface name is reported in FAMILY_PREFIX_NotifObjectGenericName.
+     The reason is reported in nodegridNotifObjectReason."
+::= { nodegridNotifPrefix 467 }
+
+notifnodegridPoEPowerBudget NOTIFICATION-TYPE
+   OBJECTS   {
+                 nodegridNotifObjectGenericName,
+                 nodegridNotifObjectPowerBudget,
+                 nodegridNotifObjectTotalUsedPower
+             }
+   STATUS current
+    DESCRIPTION
+    "PoE Power Budget Exceeded
+     The interface name is reported in FAMILY_PREFIX_NotifObjectGenericName.
+     The reason is reported in nodegridNotifObjectReason."
+::= { nodegridNotifPrefix 468 }
+
+-- Conformance Information
+-- Compliance Statements
+
+nodegridNotifCompliance   MODULE-COMPLIANCE
+    STATUS current
+    DESCRIPTION 
+      "The compliance statement for the Nodegrid Notifications MIB"
+    MODULE -- this module
+    GROUP nodegridNotifObjectsGroup
+    DESCRIPTION "The notification objects group."
+    GROUP nodegridNotifGroup
+    DESCRIPTION "The notifications group."
+::= { nodegridNotifCompliances 1 }
+
+-- units of conformance 
+nodegridNotifObjectsGroup OBJECT-GROUP
+    OBJECTS {
+        nodegridNotifObjectUserName,
+        nodegridNotifObjectGenericName,
+        nodegridNotifObjectFileName ,
+        nodegridNotifObjectDeviceName,
+        nodegridNotifObjectDeviceType,
+        nodegridNotifObjectSessionType,
+        nodegridNotifSoftwareVersion,
+        nodegridNotifNewSoftwareVersion,
+        nodegridNotifSoftwareUpgradeStatus,
+        nodegridNotifObjectLicenseType,
+        nodegridNotifObjectSerialNumber,
+        nodegridNotifObjectLicenseCounts,
+        nodegridNotifObjectLicenseExpiration,
+        nodegridNotifObjectLicenseTotal,
+        nodegridNotifObjectLicenseAvailable,
+        nodegridNotifObjectLicenseDays,
+        nodegridNotifObjectAlertIndex,
+        nodegridNotifObjectAlertString,
+        nodegridNotifObjectAlertMessage,
+        nodegridNotifObjectClusterName ,
+        nodegridNotifObjectPeerName,
+        nodegridNotifObjectPeerAddr,
+        nodegridNotifObjectDurationTime,
+        nodegridNotifObjectPowerSupplyNumber,
+        nodegridNotifObjectPowerSupplyState,
+        nodegridNotifObjectUtilizationRateAvail,
+        nodegridNotifObjectUtilizationRateTotalPorts,
+        nodegridNotifObjectUtilizationRateUsedPorts,
+        nodegridNotifObjectUnitTemperature,
+        nodegridNotifObjectDatapointStateHost,
+        nodegridNotifObjectDatapointStateInstance,
+        nodegridNotifObjectDatapointStateType,
+        nodegridNotifObjectDatapointStateValue,
+        nodegridNotifObjectDatapointStateThreshold,
+        nodegridNotifObjectHost,
+        nodegridNotifObjectIPAddress,
+        nodegridNotifObjectDoor,
+        nodegridNotifObjectAccessID,
+        nodegridNotifObjectAlarmState,
+        nodegridNotifObjectAccessMode,
+        nodegridNotifObjectSensorState,
+        nodegridNotifObjectLockState,
+        nodegridNotifObjectFanNumber,
+        nodegridNotifObjectFanStatus,
+        nodegridNotifObjectAuthMethod,
+        nodegridNotifObjectUUID,
+        nodegridNotifObjectStatus,
+        nodegridNotifObjectReason,
+	nodegridNotifObjectSSDLifeLeft,
+	nodegridNotifObjectDetectLocalSerialPorts,
+	nodegridNotifObjectLocalSerialPorts,
+        nodegridNotifObjectPowerBudget,
+        nodegridNotifObjectTotalUsedPower,
+        nodegridNotifObjectSMSphone,
+        nodegridNotifObjectSMScommand,
+        nodegridNotifObjectSMSmessage,
+	nodegridNotifObjectDIOname,
+	nodegridNotifObjectDIOdescription,
+	nodegridNotifObjectDIOvariations,
+	nodegridNotifObjectDIOstate,
+        nodegridNotifObjectConnectionName,
+        nodegridNotifObjectInterfaceName,
+	nodegridNotifObjectModemSlot,
+	nodegridNotifObjectSIMCardNumber,
+	nodegridNotifObjectSIMOperator,
+	nodegridNotifObjectSIMPhoneNumber,
+	nodegridNotifObjectSIMSignalStrength
+    }
+    STATUS current
+    DESCRIPTION 
+       "Objects used by events generated by Nodegrid Family"
+::= { nodegridNotifGroups 1 }
+
+nodegridNotifGroup        NOTIFICATION-GROUP
+    NOTIFICATIONS {
+            notifnodegridRebootStarted,
+            notifnodegridResetCmd,
+            notifnodegridSystemStarted,
+            notifnodegridSoftwareUpgradeStarted,
+            notifnodegridSoftwareUpgradeCompleted,
+            notifnodegridConfigurationStored,
+            notifnodegridConfigurationRestored,
+            notifnodegridZtpStarted,
+            notifnodegridZtpCompleted,
+            notifnodegridConfigurationChanged,
+            notifnodegridSSDLifeLeft,
+            notifnodegridLocalUserAdded,
+            notifnodegridLocalUserDeleted,
+            notifnodegridLocalUserModified,
+            notifnodegridSessionTerminated,
+            notifnodegridSessionTimedOut,
+            notifnodegridPowerSupply,
+            notifnodegridPowerSupplyStop,
+            notifnodegridUtilizationRateExceeded ,
+            notifnodegridTemperatureThrottleUp,
+            notifnodegridTemperatureDropping,
+            notifnodegridTemperatureHotWarning,
+            notifnodegridTemperatureCritical,
+            notifnodegridFanAlarm,
+            notifnodegridFanAlarmStop,
+            notifnodegridLocalSerialPortsFailDetection,
+            notifnodegridDryContactChangedState,	
+            notifnodegridLicenseAdded,
+            notifnodegridLicenseRemoved,
+            notifnodegridLicenseConflict,
+            notifnodegridLicenseScarce,
+            notifnodegridLicenseExpiring,
+            notifnodegridShellStarted,
+            notifnodegridShellStopped, 
+            notifnodegridSudoExecuted,
+            notifnodegridSMSExecuted,
+            notifnodegridSMSInvalid,
+	    notifnodegridConnectionUp,
+            notifnodegridConnectionDown,
+	    notifnodegridSIMSwap,
+            notifnodegridClusterPeerOnline,
+            notifnodegridClusterPeerOffline,
+            notifnodegridClusterPeerSignOn,
+            notifnodegridClusterPeerSignOff,
+            notifnodegridClusterPeerRemoved,
+            notifnodegridClusterNewCoordinator,
+            notifnodegridClusterCoordinatorToPeer,
+            notifnodegridClusterCoordinatorDeleted,
+            notifnodegridClusterCoordinatorCreated,
+            notifnodegridClusterPeerConfig,
+            notifnodegridSearchUnavailable,
+            notifnodegridSearchRestored,
+            notifnodegridUserLogin,
+            notifnodegridUserLogout,
+            notifnodegridAuthenticationFailure,
+            notifnodegridDeviceSessionStarted,
+            notifnodegridDeviceSessionStopped,
+            notifnodegridDeviceSessionTerminated,
+            notifnodegridDeviceCreated,
+            notifnodegridDeviceDeleted,
+            notifnodegridDeviceRenamed,
+            notifnodegridDeviceCloned,
+            notifnodegridDeviceUp,
+            notifnodegridDeviceDown,
+            notifnodegridPowerOnCmd,
+            notifnodegridPowerOffCmd,
+            notifnodegridPowerCycleCmd,
+            notifnodegridSuspendCmd,
+            notifnodegridShutdownCmd,
+            notifnodegridSystemAlert,
+            notifnodegridAlertString,
+            notifnodegridEventString,
+            notifnodegridLoggingNFSFailure,
+            notifnodegridLoggingNFSRecovered,
+            notifnodegridDatapointStateHighCritical,
+            notifnodegridDatapointStateHighWarning,
+            notifnodegridDatapointStateNormal,
+            notifnodegridDatapointStateLowWarning,
+            notifnodegridDatapointStateLowCritical,
+            notifnodegridDoorUnlocked,
+            notifnodegridDoorLocked,
+            notifnodegridDoorOpen,
+            notifnodegridDoorClose,
+            notifnodegridDoorAccessDenied,
+            notifnodegridDoorAlarmActive,
+            notifnodegridDoorAlarmInactive,
+            notifnodegridPoEPowerFault,
+            notifnodegridPoEPowerBudget
+    }
+    STATUS current
+    DESCRIPTION 
+       "Events generated by Nodegrid Family"
+::= { nodegridNotifGroups 2 }
+
+END
